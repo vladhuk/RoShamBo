@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="anchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vladhuk.client.controllers.MenuWindowController">
+   <children>
+      <Label fx:id="helloLabel" alignment="CENTER" layoutX="106.0" layoutY="78.0" prefHeight="32.0" prefWidth="376.0" text="Label" textAlignment="CENTER" AnchorPane.leftAnchor="115.0" AnchorPane.rightAnchor="115.0">
+         <font>
+            <Font name="Arial" size="28.0" />
+         </font>
+      </Label>
+      <Button focusTraversable="false" layoutX="214.0" layoutY="147.0" mnemonicParsing="false" onAction="#openSingleplayer" prefHeight="32.0" prefWidth="169.0" text="Singleplayer" AnchorPane.leftAnchor="214.0" AnchorPane.rightAnchor="216.4" />
+      <Button disable="true" focusTraversable="false" layoutX="215.0" layoutY="193.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="170.0" text="Online" AnchorPane.leftAnchor="214.0" AnchorPane.rightAnchor="216.4" />
+      <Button cancelButton="true" focusTraversable="false" layoutX="214.0" layoutY="241.0" mnemonicParsing="false" onAction="#confirmExit" prefHeight="32.0" prefWidth="170.0" text="Exit" AnchorPane.leftAnchor="214.0" AnchorPane.rightAnchor="216.4" />
+   </children>
+</AnchorPane>

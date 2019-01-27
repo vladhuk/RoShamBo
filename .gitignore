@@ -1,0 +1,8 @@
+# IDEA #
+.idea/
+*.iml
+
+# Maven #
+dependency-reduced-pom.xml
+client/target/
+server/target/
