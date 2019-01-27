@@ -1,0 +1,25 @@
+.item {
+    -fx-background-radius: 70;
+    -fx-background-size: 60 60;
+    -fx-background-position: center;
+    -fx-pref-heiht: 60;
+    -fx-pref-width: 60;
+}
+
+.item:hover {
+
+}
+
+#stone {
+    -fx-background-image: url("images/Rock1.png");
+    -fx-rotate: 14.9;
+}
+
+#scissors {
+    -fx-background-image: url("images/Scissors1.png");
+}
+
+#paper {
+    -fx-background-image: url("images/Paper1.png");
+    -fx-rotate: -46.2;
+}
