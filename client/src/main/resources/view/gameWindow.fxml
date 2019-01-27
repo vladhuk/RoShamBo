@@ -26,7 +26,7 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Button layoutX="34.0" layoutY="133.0" mnemonicParsing="false" onAction="#chooseStone" prefHeight="60.0" prefWidth="60.0" rotate="14.9" styleClass="stone" stylesheets="@../images/RPS.css" />
+      <Button layoutX="34.0" layoutY="133.0" mnemonicParsing="false" onAction="#chooseRock" prefHeight="60.0" prefWidth="60.0" rotate="14.9" styleClass="stone" stylesheets="@../images/RPS.css" />
       <Button layoutX="34.0" layoutY="209.0" mnemonicParsing="false" onAction="#chooseScissors" prefHeight="60.0" prefWidth="60.0" styleClass="scissors" stylesheets="@../images/RPS.css" />
       <Button layoutX="34.0" layoutY="281.0" mnemonicParsing="false" onAction="#choosePaper" prefHeight="60.0" prefWidth="60.0" rotate="-46.2" styleClass="paper" stylesheets="@../images/RPS.css" />
       <ImageView fx:id="playersImageView" fitHeight="160.0" fitWidth="160.0" layoutX="114.0" layoutY="159.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="114.0" />

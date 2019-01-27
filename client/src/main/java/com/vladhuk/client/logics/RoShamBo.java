@@ -5,7 +5,7 @@ import java.util.Random;
 import static com.vladhuk.client.logics.Outcome.*;
 
 public enum RoShamBo {
-    STONE(DRAW, WIN, LOSE),
+    ROCK(DRAW, WIN, LOSE),
     SCISSORS(LOSE, DRAW, WIN),
     PAPER(WIN, LOSE, DRAW);
 
@@ -20,7 +20,7 @@ public enum RoShamBo {
     public Outcome compete(RoShamBo item) {
         switch (item) {
             default:
-            case STONE: return stoneResult;
+            case ROCK: return stoneResult;
             case SCISSORS: return scissorsResult;
             case PAPER: return paperResult;
         }

@@ -1,6 +1,6 @@
 .stone {
 	-fx-background-radius: 70;
-    -fx-background-image: url("Stone1.png");
+    -fx-background-image: url("Rock1.png");
     -fx-background-size: 60 60;
     -fx-background-position: center;
     -fx-pref-heiht: 100;

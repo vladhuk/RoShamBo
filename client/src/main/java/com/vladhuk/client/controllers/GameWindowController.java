@@ -72,8 +72,8 @@ public abstract class GameWindowController extends WindowController implements I
     }
 
     @FXML
-    void chooseStone(ActionEvent event) {
-        turn(RoShamBo.STONE);
+    void chooseRock(ActionEvent event) {
+        turn(RoShamBo.ROCK);
     }
 
     protected void showResult() {
@@ -103,8 +103,8 @@ public abstract class GameWindowController extends WindowController implements I
                 playersImageView.setImage(new Image("images/Paper1.png"));
                 playersImageView.setRotate(-46.2);
                 break;
-            case STONE:
-                playersImageView.setImage(new Image("images/Stone1.png"));
+            case ROCK:
+                playersImageView.setImage(new Image("images/Rock1.png"));
                 playersImageView.setRotate(14.9);
                 break;
             case SCISSORS:
@@ -120,8 +120,8 @@ public abstract class GameWindowController extends WindowController implements I
                 opponentsImageView.setImage(new Image("images/Paper2.png"));
                 opponentsImageView.setRotate(46.2);
                 break;
-            case STONE:
-                opponentsImageView.setImage(new Image("images/Stone2.png"));
+            case ROCK:
+                opponentsImageView.setImage(new Image("images/Rock2.png"));
                 opponentsImageView.setRotate(-14.9);
                 break;
             case SCISSORS:
