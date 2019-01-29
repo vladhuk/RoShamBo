@@ -1,6 +1,6 @@
-package com.vladhuk.client.controllers;
+package com.vladhuk.roshambo.client.controllers;
 
-import com.vladhuk.client.Main;
+import com.vladhuk.roshambo.client.Client;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -11,13 +11,12 @@ import javafx.stage.Stage;
 import java.io.*;
 import java.net.Socket;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class LoginWindowController extends WindowController implements Initializable {
+public class LoginWindowController extends AbstractWindowController implements Initializable {
 
     private static final File account = new File(System.getProperty("user.home") + "/Documents/account.dat");
 
@@ -56,16 +55,13 @@ public class LoginWindowController extends WindowController implements Initializ
             connectToServer();
         } catch (FileNotFoundException e) {
             // File creates automatically
-        } catch (UnknownHostException e) {
-            informationLabel.setText("Couldn't connect to server.");
-            e.printStackTrace();
         } catch (IOException e) {
             errorAlert();
             e.printStackTrace();
         }
     }
 
-    private void loadAccount() throws FileNotFoundException, IOException {
+    private void loadAccount() throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(account))) {
             if (!reader.ready()) {
                 return;
@@ -76,8 +72,13 @@ public class LoginWindowController extends WindowController implements Initializ
         }
     }
 
-    private void connectToServer() throws IOException {
-        socket = new Socket("localhost", Main.PORT);
+    private void connectToServer() {
+        try {
+            socket = new Socket("localhost", Client.PORT);
+        } catch (IOException e) {
+            informationLabel.setText("Couldn't connect to server");
+            Client.setOnline(false);
+        }
     }
 
     private void errorAlert() {
@@ -95,11 +96,11 @@ public class LoginWindowController extends WindowController implements Initializ
             return;
         }
 
-        Main.PLAYER.setName(nicknameField.getText());
+        Client.ACCOUNT.setNickname(nicknameField.getText());
 
         saveAccount();
 
-        changeWindow(Main.MENU_WINDOW);
+        changeWindow(Client.MENU_WINDOW);
     }
 
     private boolean isFieldCorrectly(TextField checkedField, Label information) {

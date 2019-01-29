@@ -1,6 +1,6 @@
-package com.vladhuk.server;
+package com.vladhuk.roshambo.server;
 
-import com.sun.tools.javac.Main;
+import com.vladhuk.roshambo.client.Account;
 
 import java.io.*;
 import java.net.Socket;

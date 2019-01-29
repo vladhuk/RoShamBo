@@ -1,6 +1,6 @@
-package com.vladhuk.client.controllers;
+package com.vladhuk.roshambo.client.controllers;
 
-import com.vladhuk.client.Main;
+import com.vladhuk.roshambo.client.Client;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,7 +13,7 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class MenuWindowController extends WindowController implements Initializable {
+public class MenuWindowController extends AbstractWindowController implements Initializable {
 
     @FXML
     private AnchorPane anchorPane;
@@ -28,7 +28,7 @@ public class MenuWindowController extends WindowController implements Initializa
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String nickname = Main.PLAYER.getName();
+        String nickname = Client.ACCOUNT.getNickname();
         helloLabel.setText("Hello, " + nickname + "!");
     }
 
@@ -46,7 +46,7 @@ public class MenuWindowController extends WindowController implements Initializa
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == toLoginButton) {
-            changeWindow(Main.LOGIN_WINDOW);
+            changeWindow(Client.LOGIN_WINDOW);
         } else if (result.get() == toDesktopButton) {
             Stage currentStage = getStage();
             currentStage.close();
@@ -55,8 +55,7 @@ public class MenuWindowController extends WindowController implements Initializa
 
     @FXML
     void openSingleplayer(ActionEvent event) throws IOException {
-        Main.OPPONENT.setName("Bot");
-        changeWindow(Main.SINGLEPLAYER_WINDOW);
+        changeWindow(Client.SINGLEPLAYER_WINDOW);
     }
 
 }

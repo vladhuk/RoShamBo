@@ -1,4 +1,6 @@
-package com.vladhuk.server;
+package com.vladhuk.roshambo.server;
+
+import com.vladhuk.roshambo.client.Account;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -22,28 +24,19 @@ public class Server {
         try (ServerSocket serverSocket = new ServerSocket(PORT);
              BufferedReader command = new BufferedReader(new InputStreamReader(System.in))
         ) {
-            System.out.println("Server is running... Press Enter to shutdown.");
+            System.out.println("Server is running...");
 
-            while (!serverSocket.isClosed()) {
-
-                if (command.ready()) {
-                    System.out.println("Server shutdown...");
-                    serverSocket.close();
-                    break;
-                }
-
-                System.out.println("Checking for new client...");
+            while (true) {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("New connection: " + clientSocket.getInetAddress());
                 executorService.execute(new ClientHandler(clientSocket));
             }
 
-            executorService.shutdown();
-            System.out.println("Server shutdown...");
-
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            executorService.shutdown();
+            System.out.println("Server shutdown...");
         }
-
     }
 }

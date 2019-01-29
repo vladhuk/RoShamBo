@@ -1,6 +1,8 @@
-package com.vladhuk.server;
+package com.vladhuk.roshambo.client;
 
-public class Account {
+import java.io.Serializable;
+
+public class Account implements Serializable {
 
     private boolean isOnline = false;
     private String nickname;

@@ -10,7 +10,7 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="200.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vladhuk.client.controllers.LoginWindowController">
+<AnchorPane fx:id="anchorPane" prefHeight="200.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vladhuk.roshambo.client.controllers.LoginWindowController">
    <children>
       <TextField fx:id="nicknameField" focusTraversable="false" layoutX="108.0" layoutY="60.0" prefHeight="26.0" prefWidth="200.0" promptText="Nickname" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0" />
       <PasswordField fx:id="passwordField" disable="true" focusTraversable="false" layoutX="105.0" layoutY="87.0" prefHeight="26.0" prefWidth="200.0" promptText="Password" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0" />

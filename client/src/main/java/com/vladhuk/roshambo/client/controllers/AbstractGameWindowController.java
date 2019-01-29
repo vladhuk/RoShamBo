@@ -1,7 +1,6 @@
-package com.vladhuk.client.controllers;
+package com.vladhuk.roshambo.client.controllers;
 
-import com.vladhuk.client.Main;
-import com.vladhuk.client.logics.RoShamBo;
+import com.vladhuk.roshambo.client.logics.RoShamBo;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,9 +15,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static com.vladhuk.client.Main.*;
+public abstract class AbstractGameWindowController extends AbstractWindowController implements Initializable {
 
-public abstract class GameWindowController extends WindowController implements Initializable {
+    private Player player;
+    private Player opponent;
+
     @FXML
     private AnchorPane anchorPane;
 
@@ -48,13 +49,68 @@ public abstract class GameWindowController extends WindowController implements I
         return (Stage) anchorPane.getScene().getWindow();
     }
 
+    public static class Player {
+
+        private String name;
+        private int winsCounter = 0;
+        private RoShamBo item;
+
+        public Player(String name) {
+            this.name = name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getWinsCounter() {
+            return winsCounter;
+        }
+
+        public int incrementAndGetWinsCounter() {
+            return ++winsCounter;
+        }
+
+        public void resetWinsCounter() {
+            winsCounter = 0;
+        }
+
+        public void setItem(RoShamBo item) {
+            this.item = item;
+        }
+
+        public RoShamBo getItem() {
+            return item;
+        }
+    }
+
+    protected Player getPlayer() {
+        return player;
+    }
+
+    protected Player getOpponent() {
+        return opponent;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        playersNicknameLabel.setText(PLAYER.getName());
-        opponentsNicknameLabel.setText(OPPONENT.getName());
+        player = addPlayer();
+        opponent = addOpponent();
+
+        playersNicknameLabel.setText(player.getName());
+        opponentsNicknameLabel.setText(opponent.getName());
+
         addCheckingImage(playersImageView);
         addCheckingImage(opponentsImageView);
     }
+
+    protected abstract Player addPlayer();
+
+    protected abstract Player addOpponent();
 
     protected void addCheckingImage(ImageView imageView) {
         imageView.setImage(new Image("images/Question.png"));
@@ -76,20 +132,22 @@ public abstract class GameWindowController extends WindowController implements I
         turn(RoShamBo.ROCK);
     }
 
-    protected void showResult() {
-        RoShamBo player = PLAYER.getItem();
-        RoShamBo opponent = OPPONENT.getItem();
+    protected abstract void turn(RoShamBo playersItem);
 
-        switch (player.compete(opponent)) {
+    protected void showResult() {
+        RoShamBo playersItem = player.getItem();
+        RoShamBo opponentsItem = opponent.getItem();
+
+        switch (playersItem.compete(opponentsItem)) {
             case WIN:
                 informationLabel.setTextFill(Color.GREEN);
                 informationLabel.setText("You win");
-                playersCounterLabel.setText(String.valueOf(Main.PLAYER.incrementAndGetWinsCounter()));
+                playersCounterLabel.setText(String.valueOf(player.incrementAndGetWinsCounter()));
                 return;
             case LOSE:
                 informationLabel.setTextFill(Color.RED);
                 informationLabel.setText("You lose");
-                opponentsCounterLabel.setText(String.valueOf(Main.OPPONENT.incrementAndGetWinsCounter()));
+                opponentsCounterLabel.setText(String.valueOf(opponent.incrementAndGetWinsCounter()));
                 return;
             case DRAW:
                 informationLabel.setTextFill(Color.ORANGE);
@@ -97,8 +155,8 @@ public abstract class GameWindowController extends WindowController implements I
         }
     }
 
-    protected void addPlayersItemImages() {
-        switch (PLAYER.getItem()) {
+    protected void updatePlayersItemImage() {
+        switch (player.getItem()) {
             case PAPER:
                 playersImageView.setImage(new Image("images/Paper1.png"));
                 playersImageView.setRotate(-46.2);
@@ -114,8 +172,8 @@ public abstract class GameWindowController extends WindowController implements I
         }
     }
 
-    protected void addOpponentsItemImage() {
-        switch (OPPONENT.getItem()) {
+    protected void updateOpponentsItemImage() {
+        switch (opponent.getItem()) {
             case PAPER:
                 opponentsImageView.setImage(new Image("images/Paper2.png"));
                 opponentsImageView.setRotate(46.2);
@@ -133,7 +191,5 @@ public abstract class GameWindowController extends WindowController implements I
 
     @FXML
     abstract void back() throws IOException;
-
-    protected abstract void turn(RoShamBo playersItem);
 
 }

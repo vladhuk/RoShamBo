@@ -1,4 +1,4 @@
-package com.vladhuk.client.controllers;
+package com.vladhuk.roshambo.client.controllers;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public abstract class WindowController {
+public abstract class AbstractWindowController {
 
     protected void changeWindow(Window window) throws IOException {
         Stage currentStage = getStage();
