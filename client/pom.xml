@@ -5,7 +5,7 @@
     <parent>
         <artifactId>RoShamBo</artifactId>
         <groupId>com.vladhuk</groupId>
-        <version>0.8.0.1</version>
+        <version>0.9-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>client</artifactId>
@@ -95,7 +95,8 @@
                                 <fileVersion>0.8.0.1</fileVersion>
                                 <txtFileVersion>${project.version}</txtFileVersion>
                                 <fileDescription>${project.name}</fileDescription>
-                                <copyright>2019 vladhuk</copyright>
+                                <copyright>2019 Vlad Hukovskii</copyright>
+                                <companyName>vladhuk</companyName>
                                 <productVersion>0.8.0.0</productVersion>
                                 <txtProductVersion>0.8.0.0</txtProductVersion>
                                 <productName>${project.name}</productName>

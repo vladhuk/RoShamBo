@@ -9,7 +9,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.net.Socket;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,6 +20,8 @@ import java.util.regex.Pattern;
 public class LoginWindowController extends WindowController implements Initializable {
 
     private static final File account = new File(System.getProperty("user.home") + "/Documents/account.dat");
+
+    private Socket socket;
 
     @FXML
     private TextField nicknameField;
@@ -49,10 +53,15 @@ public class LoginWindowController extends WindowController implements Initializ
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             loadAccount();
+            connectToServer();
         } catch (FileNotFoundException e) {
             // File creates automatically
+        } catch (UnknownHostException e) {
+            informationLabel.setText("Couldn't connect to server.");
+            e.printStackTrace();
         } catch (IOException e) {
             errorAlert();
+            e.printStackTrace();
         }
     }
 
@@ -65,6 +74,10 @@ public class LoginWindowController extends WindowController implements Initializ
             passwordField.setText(reader.readLine());
             rememberBox.fire();
         }
+    }
+
+    private void connectToServer() throws IOException {
+        socket = new Socket("localhost", Main.PORT);
     }
 
     private void errorAlert() {

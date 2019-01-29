@@ -11,6 +11,8 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+    private static boolean isServerConnected = false;
+
     public static final WindowController.Window LOGIN_WINDOW =
             new WindowController.Window("RoShamBo -- Log in", "view/LoginWindow.fxml");
     public static final WindowController.Window MENU_WINDOW =
@@ -20,6 +22,16 @@ public class Main extends Application {
 
     public static final Player PLAYER = new Player();
     public static final Player OPPONENT = new Player();
+
+    public static final int PORT = 5543;
+
+    public static void setServerConnection(boolean isServerConnected) {
+        Main.isServerConnected = isServerConnected;
+    }
+
+    public static boolean isIsServerConnected() {
+        return isServerConnected;
+    }
 
     public static void main(String[] args) {
         launch(args);
@@ -34,5 +46,4 @@ public class Main extends Application {
         stage.getIcons().add(new Image("images/RPS.png"));
         stage.show();
     }
-
 }
