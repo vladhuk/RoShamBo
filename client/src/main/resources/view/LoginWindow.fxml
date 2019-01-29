@@ -12,10 +12,22 @@
 
 <AnchorPane fx:id="anchorPane" prefHeight="200.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vladhuk.roshambo.client.controllers.LoginWindowController">
    <children>
-      <TextField fx:id="nicknameField" focusTraversable="false" layoutX="108.0" layoutY="60.0" prefHeight="26.0" prefWidth="200.0" promptText="Nickname" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0" />
-      <PasswordField fx:id="passwordField" disable="true" focusTraversable="false" layoutX="105.0" layoutY="87.0" prefHeight="26.0" prefWidth="200.0" promptText="Password" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0" />
-      <Button defaultButton="true" focusTraversable="false" layoutX="120.0" layoutY="144.0" mnemonicParsing="false" onAction="#login" prefHeight="26.0" prefWidth="101.0" text="Login" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="229.0" />
-      <CheckBox fx:id="rememberBox" focusTraversable="false" layoutX="120.0" layoutY="120.0" mnemonicParsing="false" text="Remember me" />
+      <TextField fx:id="nicknameField" focusTraversable="false" layoutX="108.0" layoutY="60.0" prefHeight="26.0" prefWidth="200.0" promptText="Nickname" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0">
+         <font>
+            <Font name="Arial" size="12.0" />
+         </font></TextField>
+      <PasswordField fx:id="passwordField" disable="true" focusTraversable="false" layoutX="105.0" layoutY="87.0" prefHeight="26.0" prefWidth="200.0" promptText="Password" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0">
+         <font>
+            <Font name="Arial" size="12.0" />
+         </font></PasswordField>
+      <Button defaultButton="true" focusTraversable="false" layoutX="120.0" layoutY="144.0" mnemonicParsing="false" onAction="#login" prefHeight="26.0" prefWidth="101.0" text="Login" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="229.0">
+         <font>
+            <Font name="Arial" size="12.0" />
+         </font></Button>
+      <CheckBox fx:id="rememberBox" focusTraversable="false" layoutX="120.0" layoutY="120.0" mnemonicParsing="false" text="Remember me">
+         <font>
+            <Font name="Arial" size="12.0" />
+         </font></CheckBox>
       <Label fx:id="nicknameLabel" layoutX="334.0" layoutY="60.0" prefHeight="26.0" prefWidth="113.0" textFill="RED" wrapText="true" AnchorPane.rightAnchor="3.0">
          <font>
             <Font size="9.0" />
@@ -43,8 +55,17 @@
          </textFill>
       </Label>
       <Label fx:id="informationLabel" alignment="CENTER" layoutX="119.0" layoutY="177.0" prefHeight="18.0" prefWidth="210.0" textFill="RED" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0" />
-      <Button disable="true" layoutX="225.0" layoutY="144.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="101.0" text="Create account" AnchorPane.leftAnchor="229.0" AnchorPane.rightAnchor="120.0" />
-      <Label layoutX="55.0" layoutY="64.0" prefHeight="18.0" prefWidth="63.0" text="Nickname:" />
-      <Label layoutX="56.0" layoutY="91.0" prefHeight="18.0" prefWidth="63.0" text="Password:" />
+      <Button disable="true" layoutX="225.0" layoutY="144.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="101.0" text="Create account" AnchorPane.leftAnchor="229.0" AnchorPane.rightAnchor="120.0">
+         <font>
+            <Font name="Arial" size="12.0" />
+         </font></Button>
+      <Label layoutX="55.0" layoutY="64.0" prefHeight="18.0" prefWidth="63.0" text="Nickname:">
+         <font>
+            <Font name="Arial" size="12.0" />
+         </font></Label>
+      <Label layoutX="56.0" layoutY="91.0" prefHeight="18.0" prefWidth="63.0" text="Password:">
+         <font>
+            <Font name="Arial" size="12.0" />
+         </font></Label>
    </children>
 </AnchorPane>

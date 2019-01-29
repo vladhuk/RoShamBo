@@ -18,7 +18,7 @@ public class Client extends Application {
     public static final AbstractWindowController.Window MENU_WINDOW =
             new AbstractWindowController.Window("RoShamBo -- Menu", "view/MenuWindow.fxml");
     public static final AbstractWindowController.Window SINGLEPLAYER_WINDOW =
-            new AbstractWindowController.Window("RoShamBo -- Singleplayer", "view/gameWindow.fxml");
+            new AbstractWindowController.Window("RoShamBo -- Singleplayer", "view/GameWindow.fxml");
 
     public static final Account ACCOUNT = new Account();
 
