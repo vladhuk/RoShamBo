@@ -13,12 +13,10 @@ public class Client extends Application {
 
     private static boolean isOnline = false;
 
-    public static final AbstractWindowController.Window LOGIN_WINDOW =
-            new AbstractWindowController.Window("RoShamBo -- Log in", "view/LoginWindow.fxml");
-    public static final AbstractWindowController.Window MENU_WINDOW =
-            new AbstractWindowController.Window("RoShamBo -- Menu", "view/MenuWindow.fxml");
-    public static final AbstractWindowController.Window SINGLEPLAYER_WINDOW =
-            new AbstractWindowController.Window("RoShamBo -- Singleplayer", "view/GameWindow.fxml");
+    public static final Window LOGIN_WINDOW = new Window("RoShamBo -- Log in", "view/LoginWindow.fxml");
+    public static final Window MENU_WINDOW = new Window("RoShamBo -- Menu", "view/MenuWindow.fxml");
+    public static final Window SINGLEPLAYER_WINDOW = new Window("RoShamBo -- Singleplayer", "view/GameWindow.fxml");
+    public static final Window REGISTER_WINDOW = new Window("Roshambo -- Registry", "view/RegisterWindow.fxml");
 
     public static final Account ACCOUNT = new Account();
 

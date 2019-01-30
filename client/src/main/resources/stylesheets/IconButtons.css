@@ -1,0 +1,11 @@
+.iconButton {
+    -fx-min-height: 0;
+    -fx-min-width: 0;
+    -fx-pref-height: 20;
+    -fx-pref-width: 20;
+    -fx-background-size: 20 20;
+}
+
+#connection {
+    -fx-background-image: url("../images/Connection.png");
+}

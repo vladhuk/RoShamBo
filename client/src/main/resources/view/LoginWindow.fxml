@@ -10,17 +10,17 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="200.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vladhuk.roshambo.client.controllers.LoginWindowController">
+<AnchorPane fx:id="anchorPane" prefHeight="200.0" prefWidth="450.0" stylesheets="@../stylesheets/IconButtons.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vladhuk.roshambo.client.controllers.LoginWindowController">
    <children>
       <TextField fx:id="nicknameField" focusTraversable="false" layoutX="108.0" layoutY="60.0" prefHeight="26.0" prefWidth="200.0" promptText="Nickname" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0">
          <font>
             <Font name="Arial" size="12.0" />
          </font></TextField>
-      <PasswordField fx:id="passwordField" disable="true" focusTraversable="false" layoutX="105.0" layoutY="87.0" prefHeight="26.0" prefWidth="200.0" promptText="Password" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0">
+      <PasswordField fx:id="passwordField" focusTraversable="false" layoutX="105.0" layoutY="87.0" prefHeight="26.0" prefWidth="200.0" promptText="Password" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0">
          <font>
             <Font name="Arial" size="12.0" />
          </font></PasswordField>
-      <Button defaultButton="true" focusTraversable="false" layoutX="120.0" layoutY="144.0" mnemonicParsing="false" onAction="#login" prefHeight="26.0" prefWidth="101.0" text="Login" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="229.0">
+      <Button defaultButton="true" focusTraversable="false" layoutX="174.0" layoutY="144.0" mnemonicParsing="false" onAction="#login" prefHeight="26.0" prefWidth="101.0" text="Log in" AnchorPane.leftAnchor="175.0" AnchorPane.rightAnchor="175.0">
          <font>
             <Font name="Arial" size="12.0" />
          </font></Button>
@@ -55,7 +55,7 @@
          </textFill>
       </Label>
       <Label fx:id="informationLabel" alignment="CENTER" layoutX="119.0" layoutY="177.0" prefHeight="18.0" prefWidth="210.0" textFill="RED" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0" />
-      <Button disable="true" layoutX="225.0" layoutY="144.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="101.0" text="Create account" AnchorPane.leftAnchor="229.0" AnchorPane.rightAnchor="120.0">
+      <Button focusTraversable="false" layoutX="345.0" layoutY="163.0" mnemonicParsing="false" onAction="#register" prefHeight="26.0" prefWidth="100.0" text="Create account" AnchorPane.bottomAnchor="4.0" AnchorPane.rightAnchor="4.0">
          <font>
             <Font name="Arial" size="12.0" />
          </font></Button>
@@ -67,5 +67,6 @@
          <font>
             <Font name="Arial" size="12.0" />
          </font></Label>
+      <Button id="connection" focusTraversable="false" layoutX="14.0" layoutY="14.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" prefHeight="7.0" prefWidth="47.0" styleClass="iconButton" />
    </children>
 </AnchorPane>

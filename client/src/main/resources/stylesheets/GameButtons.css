@@ -4,16 +4,13 @@
     -fx-background-position: center;
     -fx-pref-heiht: 60;
     -fx-pref-width: 60;
+    -fx-background-color: transparent;
 }
 
 .item:hover {
     -fx-border-color: #2c90e2;
     -fx-border-width: 3;
     -fx-border-radius: 30;
-}
-
-.item:focused {
-    -fx-background-insets: -3, 3;
 }
 
 #stone {

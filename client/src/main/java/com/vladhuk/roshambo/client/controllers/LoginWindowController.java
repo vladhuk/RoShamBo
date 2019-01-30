@@ -18,7 +18,8 @@ import java.util.regex.Pattern;
 
 public class LoginWindowController extends AbstractWindowController implements Initializable {
 
-    private static final File account = new File(System.getProperty("user.home") + "/Documents/account.dat");
+    private static final File accountFile =
+            new File(System.getProperty("user.home") + "/Documents/Roshambo/account.dat");
 
     private Socket socket;
 
@@ -51,18 +52,25 @@ public class LoginWindowController extends AbstractWindowController implements I
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
+            createConfigDirectory();
             loadAccount();
             connectToServer();
         } catch (FileNotFoundException e) {
             // File creates automatically
         } catch (IOException e) {
-            errorAlert();
             e.printStackTrace();
         }
     }
 
+    private void createConfigDirectory() {
+        File directory = new File(System.getProperty("user.home") + "/Documents/RoShamBo");
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
+    }
+
     private void loadAccount() throws IOException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(account))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(accountFile))) {
             if (!reader.ready()) {
                 return;
             }
@@ -79,15 +87,6 @@ public class LoginWindowController extends AbstractWindowController implements I
             informationLabel.setText("Couldn't connect to server");
             Client.setOnline(false);
         }
-    }
-
-    private void errorAlert() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("RoShamBo -- Error");
-        alert.setHeaderText("Error");
-        alert.setContentText("Error loading file \"account.dat\".");
-
-        alert.showAndWait();
     }
 
     @FXML
@@ -125,12 +124,17 @@ public class LoginWindowController extends AbstractWindowController implements I
     }
 
     private void saveAccount() throws IOException {
-        try (PrintWriter writer = new PrintWriter(account)) {
+        try (PrintWriter writer = new PrintWriter(accountFile)) {
             if (rememberBox.isSelected()) {
                 writer.println(nicknameField.getText());
                 writer.println(passwordField.getText());
             }
         }
+    }
+
+    @FXML
+    void register() throws IOException {
+        changeWindow(Client.REGISTER_WINDOW);
     }
 
 }
