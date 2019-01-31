@@ -1,7 +1,7 @@
 package com.vladhuk.roshambo.client.controllers;
 
 import com.vladhuk.roshambo.client.Client;
-import javafx.event.ActionEvent;
+import com.vladhuk.roshambo.client.Connection;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -18,8 +18,10 @@ import java.util.regex.Pattern;
 
 public class LoginWindowController extends AbstractWindowController implements Initializable {
 
-    private static final File accountFile =
-            new File(System.getProperty("user.home") + "/Documents/Roshambo/account.dat");
+    private static final File ACCOUNT_FILE =
+            new File(Client.DOC_PATH + "account.dat");
+
+    private static final Stage connectionStage = new Stage();
 
     private Socket socket;
 
@@ -44,59 +46,85 @@ public class LoginWindowController extends AbstractWindowController implements I
     @FXML
     private Label informationLabel;
 
+    @FXML
+    private Button connectionButton;
+
+    @FXML
+    private Button reconnectButton;
+
+    @FXML
+    private Button createAccountButton;
+
     @Override
-    protected Stage getStage() {
+    protected Stage getCurrentStage() {
         return (Stage) anchorPane.getScene().getWindow();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        connectionButton.setTooltip(new Tooltip("Change server"));
+        reconnectButton.setTooltip(new Tooltip("Reconnect"));
+
+        if (!Connection.isConnected()) {
+            reconnectButton.setVisible(true);
+            passwordField.setDisable(true);
+            createAccountButton.setDisable(true);
+            informationLabel.setText("Couldn't connect to server");
+        }
+
         try {
-            createConfigDirectory();
             loadAccount();
-            connectToServer();
-        } catch (FileNotFoundException e) {
-            // File creates automatically
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void createConfigDirectory() {
-        File directory = new File(System.getProperty("user.home") + "/Documents/RoShamBo");
-        if (!directory.exists()) {
-            directory.mkdir();
+    @FXML
+    void reconnect() {
+        if (Connection.reconnect()) {
+            reconnectButton.setVisible(false);
+            passwordField.setDisable(false);
+            createAccountButton.setDisable(false);
+            informationLabel.setText("");
+        } else {
+            informationLabel.setText("Couldn't connect to server");
         }
     }
 
     private void loadAccount() throws IOException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(accountFile))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(ACCOUNT_FILE))) {
             if (!reader.ready()) {
                 return;
             }
             nicknameField.setText(reader.readLine());
             passwordField.setText(reader.readLine());
             rememberBox.fire();
-        }
-    }
-
-    private void connectToServer() {
-        try {
-            socket = new Socket("localhost", Client.PORT);
-        } catch (IOException e) {
-            informationLabel.setText("Couldn't connect to server");
-            Client.setOnline(false);
+        } catch (FileNotFoundException e) {
+            // File creates automatically
         }
     }
 
     @FXML
-    void login(ActionEvent event) throws IOException {
+    void setConnection() throws IOException {
+        newWindow(Client.CONNECTION_WINDOW, connectionStage);
+    }
+
+    @FXML
+    void createAccount() throws IOException {
+        connectionStage.close();
+        changeWindow(Client.REGISTER_WINDOW);
+    }
+
+    @FXML
+    void login() throws IOException {
         if (!isFieldCorrectly(nicknameField, nicknameLabel)) {
             return;
         }
 
-        Client.ACCOUNT.setNickname(nicknameField.getText());
+        connectionStage.close();
 
+        Client.ACCOUNT.setNickname(nicknameField.getText());
         saveAccount();
 
         changeWindow(Client.MENU_WINDOW);
@@ -106,7 +134,7 @@ public class LoginWindowController extends AbstractWindowController implements I
 
         String text = checkedField.getText();
 
-        if (text.isBlank()) {
+        if (text.replaceAll(" ", "").isEmpty()) {
             information.setText("Empty field");
             information.setTooltip(null);
             return false;
@@ -124,17 +152,12 @@ public class LoginWindowController extends AbstractWindowController implements I
     }
 
     private void saveAccount() throws IOException {
-        try (PrintWriter writer = new PrintWriter(accountFile)) {
+        try (PrintWriter writer = new PrintWriter(ACCOUNT_FILE)) {
             if (rememberBox.isSelected()) {
                 writer.println(nicknameField.getText());
                 writer.println(passwordField.getText());
             }
         }
-    }
-
-    @FXML
-    void register() throws IOException {
-        changeWindow(Client.REGISTER_WINDOW);
     }
 
 }

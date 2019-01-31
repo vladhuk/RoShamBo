@@ -47,7 +47,7 @@ public class RegisterWindowController extends AbstractWindowController {
 
 
     @Override
-    protected Stage getStage() {
+    protected Stage getCurrentStage() {
         return (Stage) anchorPane.getScene().getWindow();
     }
 }

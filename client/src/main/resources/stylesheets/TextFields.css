@@ -1,0 +1,4 @@
+.field.error {
+    -fx-focus-color: red;
+    -fx-border-color: red;
+}

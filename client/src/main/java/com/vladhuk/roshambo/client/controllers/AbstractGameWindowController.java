@@ -45,7 +45,7 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
     protected ImageView opponentsImageView;
 
     @Override
-    protected Stage getStage() {
+    protected Stage getCurrentStage() {
         return (Stage) anchorPane.getScene().getWindow();
     }
 

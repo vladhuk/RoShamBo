@@ -28,7 +28,12 @@ public class ClientHandler implements Runnable {
                     break;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            try {
+                System.out.println(socket.getRemoteSocketAddress().toString() + " was disconnected.");
+                socket.close();
+            } catch (IOException e1) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -39,7 +44,8 @@ public class ClientHandler implements Runnable {
 
             if (isAccountExist(account)) {
                 out.writeBoolean(true);
-            } else {
+            }
+            else {
                 out.writeBoolean(false);
             }
 
@@ -57,7 +63,8 @@ public class ClientHandler implements Runnable {
 
             if (isAccountExist(account)) {
                 out.writeBoolean(false);
-            } else {
+            }
+            else {
                 out.writeBoolean(true);
                 Server.ACCOUNTS.add(account);
             }

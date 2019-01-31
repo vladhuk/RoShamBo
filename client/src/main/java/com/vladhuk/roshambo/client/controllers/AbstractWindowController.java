@@ -11,16 +11,24 @@ import java.io.IOException;
 public abstract class AbstractWindowController {
 
     protected void changeWindow(Window window) throws IOException {
-        Stage stage = getStage();
-        stage.close();
+        Stage currentStage = getCurrentStage();
+        currentStage.close();
 
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource(window.PATH_TO_FXML));
         Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle(window.NAME);
-        stage.show();
+        currentStage.setScene(scene);
+        currentStage.setTitle(window.NAME);
+        currentStage.show();
     }
 
-    protected abstract Stage getStage();
+    protected abstract Stage getCurrentStage();
+
+    protected void newWindow(Window window, Stage newStage) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource(window.PATH_TO_FXML));
+        Scene scene = new Scene(root);
+        newStage.setScene(scene);
+        newStage.setTitle(window.NAME);
+        newStage.show();
+    }
 
 }

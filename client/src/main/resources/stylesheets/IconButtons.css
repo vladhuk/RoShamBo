@@ -9,3 +9,11 @@
 #connection {
     -fx-background-image: url("../images/Connection.png");
 }
+
+#update {
+    -fx-background-image: url("../images/Update.png");
+}
+
+#save {
+    -fx-background-image: url("../images/Save.png");
+}

@@ -28,7 +28,7 @@ public class Server {
 
             while (true) {
                 Socket clientSocket = serverSocket.accept();
-                System.out.println("New connection: " + clientSocket.getInetAddress());
+                System.out.println("New connection: " + clientSocket.getRemoteSocketAddress().toString());
                 executorService.execute(new ClientHandler(clientSocket));
             }
 

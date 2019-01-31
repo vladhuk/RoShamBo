@@ -22,7 +22,7 @@ public class MenuWindowController extends AbstractWindowController implements In
     private Label helloLabel;
 
     @Override
-    public Stage getStage() {
+    public Stage getCurrentStage() {
         return (Stage) anchorPane.getScene().getWindow();
     }
 
@@ -48,7 +48,7 @@ public class MenuWindowController extends AbstractWindowController implements In
         if (result.get() == toLoginButton) {
             changeWindow(Client.LOGIN_WINDOW);
         } else if (result.get() == toDesktopButton) {
-            Stage currentStage = getStage();
+            Stage currentStage = getCurrentStage();
             currentStage.close();
         }
     }
