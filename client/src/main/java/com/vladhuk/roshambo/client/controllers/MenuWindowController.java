@@ -28,7 +28,7 @@ public class MenuWindowController extends AbstractWindowController implements In
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String nickname = Client.ACCOUNT.getNickname();
+        String nickname = Client.getAccount().getNickname();
         helloLabel.setText("Hello, " + nickname + "!");
     }
 

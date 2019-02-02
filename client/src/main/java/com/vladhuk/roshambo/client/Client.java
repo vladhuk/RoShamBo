@@ -1,5 +1,6 @@
 package com.vladhuk.roshambo.client;
 
+import com.vladhuk.roshambo.server.Account;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,13 +13,22 @@ import java.io.*;
 
 public class Client extends Application {
 
+    private static Account account = new Account();
+
     public static final String DOC_PATH = System.getProperty("user.home") + "/Documents/Roshambo/";
     public static final Window LOGIN_WINDOW = new Window("RoShamBo -- Log in", "view/LoginWindow.fxml");
     public static final Window MENU_WINDOW = new Window("RoShamBo -- Menu", "view/MenuWindow.fxml");
     public static final Window SINGLEPLAYER_WINDOW = new Window("RoShamBo -- Singleplayer", "view/GameWindow.fxml");
     public static final Window REGISTER_WINDOW = new Window("Roshambo -- Registry", "view/RegisterWindow.fxml");
     public static final Window CONNECTION_WINDOW = new Window("Roshambo -- Change server", "view/ConnectionWindow.fxml");
-    public static final Account ACCOUNT = new Account();
+
+    public static Account getAccount() {
+        return account;
+    }
+
+    public static void setAccount(Account account) {
+        Client.account = account;
+    }
 
     public static void main(String[] args) {
         launch(args);

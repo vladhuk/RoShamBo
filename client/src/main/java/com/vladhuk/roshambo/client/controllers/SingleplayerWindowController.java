@@ -10,7 +10,7 @@ public class SingleplayerWindowController extends AbstractGameWindowController {
 
     @Override
     protected Player addPlayer() {
-        return new Player("");
+        return new Player(Client.getAccount().getNickname());
     }
 
     @Override

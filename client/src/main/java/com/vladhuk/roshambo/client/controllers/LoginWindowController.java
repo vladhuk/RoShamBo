@@ -124,7 +124,7 @@ public class LoginWindowController extends AbstractWindowController implements I
 
         connectionStage.close();
 
-        Client.ACCOUNT.setNickname(nicknameField.getText());
+        Client.getAccount().setNickname(nicknameField.getText());
         saveAccount();
 
         changeWindow(Client.MENU_WINDOW);

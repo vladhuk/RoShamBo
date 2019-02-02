@@ -1,4 +1,4 @@
-package com.vladhuk.roshambo.client;
+package com.vladhuk.roshambo.server;
 
 import java.io.Serializable;
 
@@ -54,5 +54,15 @@ public class Account implements Serializable {
         Account object = (Account) obj;
 
         return object.nickname.equals(nickname) && object.password.equals(password);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 0;
+
+        result += 37 * result + nickname.hashCode();
+        result += 37 * result + password.hashCode();
+
+        return result;
     }
 }

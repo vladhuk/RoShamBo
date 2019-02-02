@@ -1,5 +1,10 @@
 package com.vladhuk.roshambo.client;
 
+import com.vladhuk.roshambo.server.Account;
+import com.vladhuk.roshambo.server.Commander;
+import com.vladhuk.roshambo.server.DisconnectException;
+import com.vladhuk.roshambo.server.ServerCommand;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -9,6 +14,7 @@ public class Connection {
     private static final int PORT = 5543;
 
     private static Socket socket;
+    private static Commander commander;
     private static String ip = "";
     private static boolean isConnected = false;
 
@@ -55,8 +61,10 @@ public class Connection {
             return false;
         }
 
+        commander = new Commander(socket);
         Connection.ip = ip;
         isConnected = true;
+
         return true;
     }
 
@@ -78,22 +86,20 @@ public class Connection {
         return isConnected;
     }
 
-    public static void sendMessage(String message) {
-        // TODO
+    public static void sendAccount(Account account) throws DisconnectException {
+        commander.sendAccount(account);
     }
 
-    public static String receiveMessage() {
-        // TODO
-        return "";
+    public static Account receiveAcoount() throws DisconnectException {
+        return commander.receiveAccount();
     }
 
-    public static void sendAccount(Account account) {
-        // TODO
+    public static void sendCommand(ServerCommand command) throws DisconnectException {
+        commander.sendCommand(command);
     }
 
-    public static Account receiveAcoount() {
-        // TODO
-        return null;
+    public static boolean getAnswer() throws DisconnectException {
+        return commander.receiveAnswer();
     }
 
 }

@@ -1,21 +1,26 @@
 package com.vladhuk.roshambo.server;
 
-import com.vladhuk.roshambo.client.Account;
-
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server {
 
-    public static final int PORT = 5543;
+    private static final int PORT = 5543;
 
-    public static final List<Account> ACCOUNTS = Collections.synchronizedList(new LinkedList<>());
+    private static Map<Integer, Account> accounts = Collections.synchronizedMap(new HashMap<>());
+    private static Map<Integer, Account> accountsOnline = Collections.synchronizedMap(new HashMap<>());
+
+    public static Map<Integer, Account> getAccounts() {
+        return accounts;
+    }
+
+    public static void setAccounts(Map<Integer, Account> accounts) {
+        Server.accounts = accounts;
+    }
 
     public static void main(String[] args) {
 
