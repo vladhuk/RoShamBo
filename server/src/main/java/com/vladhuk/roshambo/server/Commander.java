@@ -2,7 +2,6 @@ package com.vladhuk.roshambo.server;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.function.Consumer;
 
 public class Commander {
 
@@ -13,7 +12,8 @@ public class Commander {
     }
 
     private void sendObject(Serializable object) throws DisconnectException {
-        try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
+        try {
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
             out.writeObject(object);
             out.flush();
         } catch (IOException e) {
@@ -24,7 +24,8 @@ public class Commander {
     private Object receiveObject() throws DisconnectException {
         Object object = null;
 
-        try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
+        try {
+            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
             object = in.readObject();
         } catch (IOException e) {
             throw new DisconnectException();
@@ -52,7 +53,8 @@ public class Commander {
     }
 
     public void sendAccountID(int id) throws DisconnectException {
-        try (DataOutputStream out = new DataOutputStream(socket.getOutputStream())) {
+        try {
+            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             out.writeInt(id);
             out.flush();
         } catch (IOException e) {
@@ -61,19 +63,18 @@ public class Commander {
     }
 
     public int receiveAccountID() throws DisconnectException {
-        int id = 0;
-
-        try (DataInputStream in = new DataInputStream(socket.getInputStream())) {
-            id = in.readInt();
+        try {
+            DataInputStream in = new DataInputStream(socket.getInputStream());
+            int id = in.readInt();
+            return id;
         } catch (IOException e) {
             throw new DisconnectException();
         }
-
-        return id;
     }
 
     public void sendAnswer(boolean answer) throws DisconnectException {
-        try (DataOutputStream out = new DataOutputStream(socket.getOutputStream())) {
+        try {
+            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             out.writeBoolean(answer);
             out.flush();
         } catch (IOException e) {
@@ -82,15 +83,23 @@ public class Commander {
     }
 
     public boolean receiveAnswer() throws DisconnectException {
-        boolean answer = false;
-
-        try (DataInputStream in = new DataInputStream(socket.getInputStream())) {
-            answer = in.readBoolean();
+        try {
+            DataInputStream in = new DataInputStream(socket.getInputStream());
+            boolean answer = in.readBoolean();
+            return answer;
         } catch (IOException e) {
             throw new DisconnectException();
         }
+    }
 
-        return answer;
+    public void closeSocket() {
+        try {
+            if (socket != null) {
+                socket.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

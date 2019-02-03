@@ -1,7 +1,5 @@
 package com.vladhuk.roshambo.server;
 
-import java.io.Serializable;
-
-public enum ServerCommand implements Serializable {
+public enum ServerCommand {
     LOGIN, CREATE_ACCOUNT
 }

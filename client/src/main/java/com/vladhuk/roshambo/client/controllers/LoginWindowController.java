@@ -2,6 +2,7 @@ package com.vladhuk.roshambo.client.controllers;
 
 import com.vladhuk.roshambo.client.Client;
 import com.vladhuk.roshambo.client.Connection;
+import com.vladhuk.roshambo.server.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -12,11 +13,9 @@ import java.io.*;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
-public class LoginWindowController extends AbstractWindowController implements Initializable {
+public class LoginWindowController extends AbstractAuthorizationWindowController implements Initializable {
 
     private static final File ACCOUNT_FILE =
             new File(Client.DOC_PATH + "account.dat");
@@ -26,16 +25,22 @@ public class LoginWindowController extends AbstractWindowController implements I
     private Socket socket;
 
     @FXML
+    private AnchorPane anchorPane;
+
+    @FXML
+    private Button connectionButton;
+
+    @FXML
+    private Button reconnectButton;
+
+    @FXML
+    private Button createAccountButton;
+
+    @FXML
     private TextField nicknameField;
 
     @FXML
     private PasswordField passwordField;
-
-    @FXML
-    private AnchorPane anchorPane;
-
-    @FXML
-    private CheckBox rememberBox;
 
     @FXML
     private Label nicknameLabel;
@@ -47,13 +52,7 @@ public class LoginWindowController extends AbstractWindowController implements I
     private Label informationLabel;
 
     @FXML
-    private Button connectionButton;
-
-    @FXML
-    private Button reconnectButton;
-
-    @FXML
-    private Button createAccountButton;
+    private CheckBox rememberBox;
 
     @Override
     protected Stage getCurrentStage() {
@@ -62,14 +61,11 @@ public class LoginWindowController extends AbstractWindowController implements I
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         connectionButton.setTooltip(new Tooltip("Change server"));
         reconnectButton.setTooltip(new Tooltip("Reconnect"));
 
         if (!Connection.isConnected()) {
-            reconnectButton.setVisible(true);
-            passwordField.setDisable(true);
-            createAccountButton.setDisable(true);
+            setWindowOnlineStatus(false);
             informationLabel.setText("Couldn't connect to server");
         }
 
@@ -80,14 +76,19 @@ public class LoginWindowController extends AbstractWindowController implements I
         }
     }
 
+    private void setWindowOnlineStatus(boolean status) {
+        reconnectButton.setVisible(!status);
+        passwordField.setDisable(!status);
+        createAccountButton.setDisable(!status);
+    }
+
     @FXML
     void reconnect() {
         if (Connection.reconnect()) {
-            reconnectButton.setVisible(false);
-            passwordField.setDisable(false);
-            createAccountButton.setDisable(false);
+            setWindowOnlineStatus(true);
             informationLabel.setText("");
-        } else {
+        }
+        else {
             informationLabel.setText("Couldn't connect to server");
         }
     }
@@ -118,45 +119,70 @@ public class LoginWindowController extends AbstractWindowController implements I
 
     @FXML
     void login() throws IOException {
-        if (!isFieldCorrectly(nicknameField, nicknameLabel)) {
+        if (!checkFields()) {
+            informationLabel.setText("");
             return;
         }
 
+        Account account = new Account(nicknameField.getText(), passwordField.getText());
+
+        if (Connection.isConnected()) {
+            try {
+                account = loadAccountFromServer(account);
+                if (account == null) {
+                    informationLabel.setText("Account doesn't exist");
+                    return;
+                }
+            } catch (DisconnectException e) {
+                setWindowOnlineStatus(false);
+                informationLabel.setText("Lost connection to server");
+                e.printStackTrace();
+                return;
+            }
+        }
+
+        Client.setAccount(account);
+
+        if (rememberBox.isSelected()) {
+            saveFields();
+        }
+
         connectionStage.close();
-
-        Client.getAccount().setNickname(nicknameField.getText());
-        saveAccount();
-
         changeWindow(Client.MENU_WINDOW);
     }
 
-    private boolean isFieldCorrectly(TextField checkedField, Label information) {
+    private boolean checkFields() {
+        boolean result = true;
 
-        String text = checkedField.getText();
-
-        if (text.replaceAll(" ", "").isEmpty()) {
-            information.setText("Empty field");
-            information.setTooltip(null);
-            return false;
+        if (!isFieldCorrectly(nicknameField, nicknameLabel)) {
+            result = false;
         }
 
-        Matcher matcher = Pattern.compile("\\W").matcher(text);
-        if (matcher.find()) {
-            information.setText("Field mustn't contain cyrillic, spaces and special symbols.");
-            return false;
+        if (Connection.isConnected() && !isFieldCorrectly(passwordField, passwordLabel)) {
+            result = false;
         }
 
-        information.setText("");
-
-        return true;
+        return result;
     }
 
-    private void saveAccount() throws IOException {
+    private Account loadAccountFromServer(Account account) throws DisconnectException {
+        Connection.sendCommand(ServerCommand.LOGIN);
+        Connection.sendAccountID(account.hashCode());
+
+        Account serverAccount = null;
+
+        boolean answer = Connection.receiveAnswer();
+        if (answer) {
+            serverAccount = Connection.receiveAccount();
+        }
+
+        return serverAccount;
+    }
+
+    private void saveFields() throws IOException {
         try (PrintWriter writer = new PrintWriter(ACCOUNT_FILE)) {
-            if (rememberBox.isSelected()) {
-                writer.println(nicknameField.getText());
-                writer.println(passwordField.getText());
-            }
+            writer.println(nicknameField.getText());
+            writer.println(passwordField.getText());
         }
     }
 

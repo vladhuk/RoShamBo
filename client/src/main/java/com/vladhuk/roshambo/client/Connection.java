@@ -46,12 +46,8 @@ public class Connection {
     }
 
     public static boolean connect(String ip) {
-        try {
-            if (socket != null) {
-                socket.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (commander != null) {
+            commander.closeSocket();
         }
 
         try {
@@ -87,19 +83,56 @@ public class Connection {
     }
 
     public static void sendAccount(Account account) throws DisconnectException {
-        commander.sendAccount(account);
+        try {
+            commander.sendAccount(account);
+        } catch (DisconnectException e) {
+            isConnected = false;
+            throw e;
+        }
     }
 
-    public static Account receiveAcoount() throws DisconnectException {
-        return commander.receiveAccount();
+    public static Account receiveAccount() throws DisconnectException {
+        Account account;
+
+        try {
+            account = commander.receiveAccount();
+        } catch (DisconnectException e) {
+            isConnected = false;
+            throw e;
+        }
+
+        return account;
+    }
+
+    public static void sendAccountID(int id) throws DisconnectException {
+        try {
+            commander.sendAccountID(id);
+        } catch (DisconnectException e) {
+            isConnected = false;
+            throw e;
+        }
     }
 
     public static void sendCommand(ServerCommand command) throws DisconnectException {
-        commander.sendCommand(command);
+        try {
+            commander.sendCommand(command);
+        } catch (DisconnectException e) {
+            isConnected = false;
+            throw e;
+        }
     }
 
-    public static boolean getAnswer() throws DisconnectException {
-        return commander.receiveAnswer();
+    public static boolean receiveAnswer() throws DisconnectException {
+        boolean answer;
+
+        try {
+            answer = commander.receiveAnswer();
+        } catch (DisconnectException e) {
+            isConnected = false;
+            throw e;
+        }
+
+        return answer;
     }
 
 }

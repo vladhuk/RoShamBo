@@ -1,6 +1,5 @@
 package com.vladhuk.roshambo.server;
 
-import java.io.*;
 import java.net.Socket;
 
 public class ClientHandler implements Runnable {
@@ -28,7 +27,7 @@ public class ClientHandler implements Runnable {
             }
         } catch (DisconnectException e) {
             System.out.println(socket.getRemoteSocketAddress().toString() + " was disconnected.");
-            disableSocket();
+            commander.closeSocket();
         }
     }
 
@@ -37,7 +36,6 @@ public class ClientHandler implements Runnable {
 
         boolean answer = isAccountExist(id);
         commander.sendAnswer(answer);
-
         if (answer) {
             commander.sendAccount(Server.getAccounts().get(id));
         }
@@ -57,14 +55,6 @@ public class ClientHandler implements Runnable {
 
     private boolean isAccountExist(int id) {
         return Server.getAccounts().keySet().contains(id);
-    }
-
-    private void disableSocket() {
-        try {
-            socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 }
