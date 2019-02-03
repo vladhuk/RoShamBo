@@ -15,21 +15,24 @@ public class ClientHandler implements Runnable {
     @Override
     public void run() {
         try {
-            ServerCommand command = commander.receiveCommand();
+            while (true) {
+                ServerCommand command = commander.receiveCommand();
 
-            switch (command) {
-                case LOGIN:
-                    login();
-                    break;
-                case CREATE_ACCOUNT:
-                    createAccount();
-                    break;
+                switch (command) {
+                    case LOGIN:
+                        login();
+                        break;
+                    case CREATE_ACCOUNT:
+                        createAccount();
+                        break;
+                }
             }
         } catch (DisconnectException e) {
             System.out.println(socket.getRemoteSocketAddress().toString() + " was disconnected.");
             commander.closeSocket();
         }
     }
+
 
     private void login() throws DisconnectException {
         int id = commander.receiveAccountID();

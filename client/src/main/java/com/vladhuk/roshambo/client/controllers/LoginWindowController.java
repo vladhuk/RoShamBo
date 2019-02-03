@@ -10,7 +10,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -21,8 +20,6 @@ public class LoginWindowController extends AbstractAuthorizationWindowController
             new File(Client.DOC_PATH + "account.dat");
 
     private static final Stage connectionStage = new Stage();
-
-    private Socket socket;
 
     @FXML
     private AnchorPane anchorPane;

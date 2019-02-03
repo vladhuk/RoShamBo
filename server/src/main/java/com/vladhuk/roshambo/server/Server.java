@@ -26,9 +26,7 @@ public class Server {
 
         ExecutorService executorService = Executors.newCachedThreadPool();
 
-        try (ServerSocket serverSocket = new ServerSocket(PORT);
-             BufferedReader command = new BufferedReader(new InputStreamReader(System.in))
-        ) {
+        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             System.out.println("Server is running...");
 
             while (true) {
