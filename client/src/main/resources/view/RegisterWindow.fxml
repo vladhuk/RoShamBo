@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -61,7 +62,14 @@
             <Font name="Arial Bold" size="18.0" />
          </font>
       </Label>
-      <Button id="update" fx:id="reconnectButton" focusTraversable="false" layoutX="45.0" layoutY="15.0" mnemonicParsing="false" onAction="#reconnect" styleClass="iconButton" visible="false" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0" />
+      <Button id="update" fx:id="reconnectButton" focusTraversable="false" layoutX="45.0" layoutY="15.0" mnemonicParsing="false" onAction="#reconnect" styleClass="iconButton" visible="false" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+         <tooltip>
+            <Tooltip text="Reconnect">
+               <font>
+                  <Font name="Arial" size="12.0" />
+               </font>
+            </Tooltip>
+         </tooltip></Button>
    </children>
    <stylesheets>
       <URL value="@../stylesheets/TextFields.css" />

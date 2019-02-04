@@ -11,7 +11,7 @@ public class Commander {
         this.socket = socket;
     }
 
-    private void sendObject(Serializable object) throws DisconnectException {
+    public synchronized void sendObject(Object object) throws DisconnectException {
         try {
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
             out.writeObject(object);
@@ -21,7 +21,7 @@ public class Commander {
         }
     }
 
-    private Object receiveObject() throws DisconnectException {
+    public synchronized Object receiveObject() throws DisconnectException {
         Object object = null;
 
         try {
@@ -36,43 +36,27 @@ public class Commander {
         return object;
     }
 
-    public void sendCommand(ServerCommand command) throws DisconnectException {
-        sendObject(command);
-    }
-
-    public ServerCommand receiveCommand() throws DisconnectException {
-        return (ServerCommand) receiveObject();
-    }
-
-    public void sendAccount(Account account) throws DisconnectException {
-        sendObject(account);
-    }
-
-    public Account receiveAccount() throws DisconnectException {
-        return (Account) receiveObject();
-    }
-
-    public void sendAccountID(int id) throws DisconnectException {
+    public synchronized void sendInteger(int i) throws DisconnectException {
         try {
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-            out.writeInt(id);
+            out.writeInt(i);
             out.flush();
         } catch (IOException e) {
             throw new DisconnectException();
         }
     }
 
-    public int receiveAccountID() throws DisconnectException {
+    public synchronized int receiveInteger() throws DisconnectException {
         try {
-            DataInputStream in = new DataInputStream(socket.getInputStream());
-            int id = in.readInt();
+            DataInputStream i = new DataInputStream(socket.getInputStream());
+            int id = i.readInt();
             return id;
         } catch (IOException e) {
             throw new DisconnectException();
         }
     }
 
-    public void sendAnswer(boolean answer) throws DisconnectException {
+    public synchronized void sendAnswer(boolean answer) throws DisconnectException {
         try {
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             out.writeBoolean(answer);

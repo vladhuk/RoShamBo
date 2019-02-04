@@ -1,7 +1,7 @@
 package com.vladhuk.roshambo.client.controllers;
 
 import com.vladhuk.roshambo.client.Client;
-import javafx.event.ActionEvent;
+import com.vladhuk.roshambo.client.Connection;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -21,6 +21,9 @@ public class MenuWindowController extends AbstractWindowController implements In
     @FXML
     private Label helloLabel;
 
+    @FXML
+    private Button onlineButton;
+
     @Override
     public Stage getCurrentStage() {
         return (Stage) anchorPane.getScene().getWindow();
@@ -28,12 +31,26 @@ public class MenuWindowController extends AbstractWindowController implements In
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        if (Connection.isConnected()) {
+            onlineButton.setDisable(false);
+        }
+
         String nickname = Client.getAccount().getNickname();
         helloLabel.setText("Hello, " + nickname + "!");
     }
 
     @FXML
-    void confirmExit(ActionEvent event) throws Exception {
+    void openSingleplayer() throws IOException {
+        changeWindow(Client.SINGLEPLAYER_WINDOW);
+    }
+
+    @FXML
+    void openOnline() throws IOException {
+        changeWindow(Client.ROOMS_WINDOW);
+    }
+
+    @FXML
+    void confirmExit() throws Exception {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Exit");
         alert.setHeaderText("Where do you want to exit?");
@@ -51,11 +68,6 @@ public class MenuWindowController extends AbstractWindowController implements In
             Stage currentStage = getCurrentStage();
             currentStage.close();
         }
-    }
-
-    @FXML
-    void openSingleplayer(ActionEvent event) throws IOException {
-        changeWindow(Client.SINGLEPLAYER_WINDOW);
     }
 
 }

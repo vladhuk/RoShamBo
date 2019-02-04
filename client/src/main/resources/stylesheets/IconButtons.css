@@ -17,3 +17,7 @@
 #save {
     -fx-background-image: url("../images/Save.png");
 }
+
+#plus {
+    -fx-background-image: url("../images/Plus.png");
+}

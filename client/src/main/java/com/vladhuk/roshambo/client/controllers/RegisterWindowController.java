@@ -104,8 +104,8 @@ public class RegisterWindowController extends AbstractAuthorizationWindowControl
     }
 
     private boolean sendAccountToServer(Account account) throws DisconnectException {
-        Connection.sendCommand(ServerCommand.CREATE_ACCOUNT);
-        Connection.sendAccount(account);
+        Connection.sendObject(ServerCommand.CREATE_ACCOUNT);
+        Connection.sendObject(account);
         return Connection.receiveAnswer();
     }
 

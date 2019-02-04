@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="anchorPane" prefHeight="350.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vladhuk.roshambo.client.controllers.RoomsWindowController">
+   <children>
+      <ToolBar layoutX="5.0" layoutY="14.0" prefHeight="20.0" prefWidth="240.0" stylesheets="@../stylesheets/IconButtons.css" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+        <items>
+          <Button id="plus" focusTraversable="false" mnemonicParsing="false" onAction="#addRoom" styleClass="iconButton">
+               <tooltip>
+                  <Tooltip text="Add room">
+                     <font>
+                        <Font name="Arial" size="12.0" />
+                     </font>
+                  </Tooltip>
+               </tooltip>
+            </Button>
+            <Button id="update" focusTraversable="false" mnemonicParsing="false" onAction="#update" styleClass="iconButton">
+               <tooltip>
+                  <Tooltip text="Update">
+                     <font>
+                        <Font name="Arial" size="12.0" />
+                     </font>
+                  </Tooltip>
+               </tooltip>
+            </Button>
+        </items>
+      </ToolBar>
+      <ImageView id="users" fitHeight="20.0" fitWidth="20.0" layoutX="182.0" layoutY="326.0" pickOnBounds="true" preserveRatio="true" styleClass="icon" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0">
+         <image>
+            <Image url="@../images/Users.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="usersLabel" layoutX="32.0" layoutY="325.0" prefHeight="18.0" prefWidth="38.0" AnchorPane.bottomAnchor="6.600000000000023" AnchorPane.leftAnchor="32.0">
+         <font>
+            <Font name="Arial" size="14.0" />
+         </font>
+      </Label>
+      <ScrollPane layoutX="5.0" layoutY="35.0" prefHeight="284.0" prefWidth="240.0" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="35.0">
+         <content>
+            <ListView fx:id="listView" prefHeight="279.0" prefWidth="240.0" />
+         </content>
+      </ScrollPane>
+      <Button cancelButton="true" layoutX="183.0" layoutY="319.0" mnemonicParsing="false" onAction="#back" text="Back" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
+         <font>
+            <Font name="Arial" size="12.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

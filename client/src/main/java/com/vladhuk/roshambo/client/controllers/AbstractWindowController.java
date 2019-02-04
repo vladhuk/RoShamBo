@@ -4,6 +4,7 @@ import com.vladhuk.roshambo.client.Window;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ public abstract class AbstractWindowController {
         currentStage.close();
 
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource(window.PATH_TO_FXML));
+
         Scene scene = new Scene(root);
         currentStage.setScene(scene);
         currentStage.setTitle(window.NAME);
@@ -29,6 +31,14 @@ public abstract class AbstractWindowController {
         newStage.setScene(scene);
         newStage.setTitle(window.NAME);
         newStage.show();
+    }
+
+    protected void showDisconnectAlert() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Roshambo -- Error");
+        alert.setHeaderText("Lost connection to server");
+        alert.setContentText("The game will continue in offline mode.");
+        alert.showAndWait();
     }
 
 }

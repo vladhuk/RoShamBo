@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 public class Account implements Serializable {
 
-    private boolean isOnline = false;
     private String nickname;
     private String password;
 
@@ -13,14 +12,6 @@ public class Account implements Serializable {
     public Account(String nickname, String password) {
         this.nickname = nickname;
         this.password = password;
-    }
-
-    public boolean isOnline() {
-        return isOnline;
-    }
-
-    public void setOnline(boolean online) {
-        isOnline = online;
     }
 
     public void setNickname(String nickname) {
@@ -37,6 +28,11 @@ public class Account implements Serializable {
 
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String toString() {
+        return nickname;
     }
 
     @Override

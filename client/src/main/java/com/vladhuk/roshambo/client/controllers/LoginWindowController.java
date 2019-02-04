@@ -25,9 +25,6 @@ public class LoginWindowController extends AbstractAuthorizationWindowController
     private AnchorPane anchorPane;
 
     @FXML
-    private Button connectionButton;
-
-    @FXML
     private Button reconnectButton;
 
     @FXML
@@ -58,9 +55,6 @@ public class LoginWindowController extends AbstractAuthorizationWindowController
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        connectionButton.setTooltip(new Tooltip("Change server"));
-        reconnectButton.setTooltip(new Tooltip("Reconnect"));
-
         if (!Connection.isConnected()) {
             setWindowOnlineStatus(false);
             informationLabel.setText("Couldn't connect to server");
@@ -127,7 +121,7 @@ public class LoginWindowController extends AbstractAuthorizationWindowController
             try {
                 account = loadAccountFromServer(account);
                 if (account == null) {
-                    informationLabel.setText("Account doesn't exist");
+                    informationLabel.setText("Invalid nickname or password");
                     return;
                 }
             } catch (DisconnectException e) {
@@ -163,14 +157,14 @@ public class LoginWindowController extends AbstractAuthorizationWindowController
     }
 
     private Account loadAccountFromServer(Account account) throws DisconnectException {
-        Connection.sendCommand(ServerCommand.LOGIN);
-        Connection.sendAccountID(account.hashCode());
+        Connection.sendObject(ServerCommand.LOGIN);
+        Connection.sendInteger(account.hashCode());
 
         Account serverAccount = null;
 
         boolean answer = Connection.receiveAnswer();
         if (answer) {
-            serverAccount = Connection.receiveAccount();
+            serverAccount = (Account) Connection.receiveObject();
         }
 
         return serverAccount;

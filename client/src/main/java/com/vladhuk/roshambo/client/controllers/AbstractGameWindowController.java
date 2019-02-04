@@ -49,6 +49,18 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
         return (Stage) anchorPane.getScene().getWindow();
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        player = addPlayer();
+        opponent = addOpponent();
+
+        playersNicknameLabel.setText(player.getName());
+        opponentsNicknameLabel.setText(opponent.getName());
+
+        addCheckingImage(playersImageView);
+        addCheckingImage(opponentsImageView);
+    }
+
     public static class Player {
 
         private String name;
@@ -96,18 +108,6 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
         return opponent;
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        player = addPlayer();
-        opponent = addOpponent();
-
-        playersNicknameLabel.setText(player.getName());
-        opponentsNicknameLabel.setText(opponent.getName());
-
-        addCheckingImage(playersImageView);
-        addCheckingImage(opponentsImageView);
-    }
-
     protected abstract Player addPlayer();
 
     protected abstract Player addOpponent();
@@ -118,17 +118,17 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
     }
 
     @FXML
-    void choosePaper(ActionEvent event) {
+    void choosePaper() {
         turn(RoShamBo.PAPER);
     }
 
     @FXML
-    void chooseScissors(ActionEvent event) {
+    void chooseScissors() {
         turn(RoShamBo.SCISSORS);
     }
 
     @FXML
-    void chooseRock(ActionEvent event) {
+    void chooseRock() {
         turn(RoShamBo.ROCK);
     }
 

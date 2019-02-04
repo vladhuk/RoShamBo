@@ -1,9 +1,7 @@
 package com.vladhuk.roshambo.client;
 
-import com.vladhuk.roshambo.server.Account;
 import com.vladhuk.roshambo.server.Commander;
 import com.vladhuk.roshambo.server.DisconnectException;
-import com.vladhuk.roshambo.server.ServerCommand;
 
 import java.io.*;
 import java.net.Socket;
@@ -82,44 +80,48 @@ public class Connection {
         return isConnected;
     }
 
-    public static void sendAccount(Account account) throws DisconnectException {
+    public static void sendObject(Object object) throws DisconnectException {
         try {
-            commander.sendAccount(account);
+            commander.sendObject(object);
         } catch (DisconnectException e) {
             isConnected = false;
             throw e;
         }
     }
 
-    public static Account receiveAccount() throws DisconnectException {
-        Account account;
+    public static Object receiveObject() throws DisconnectException {
+        Object object;
 
         try {
-            account = commander.receiveAccount();
+            object = commander.receiveObject();
         } catch (DisconnectException e) {
             isConnected = false;
             throw e;
         }
 
-        return account;
+        return object;
     }
 
-    public static void sendAccountID(int id) throws DisconnectException {
+    public static void sendInteger(int i) throws DisconnectException {
         try {
-            commander.sendAccountID(id);
+            commander.sendInteger(i);
         } catch (DisconnectException e) {
             isConnected = false;
             throw e;
         }
     }
 
-    public static void sendCommand(ServerCommand command) throws DisconnectException {
+    public static int receiveInteger() throws DisconnectException {
+        int i;
+
         try {
-            commander.sendCommand(command);
+            i = commander.receiveInteger();
         } catch (DisconnectException e) {
             isConnected = false;
             throw e;
         }
+
+        return i;
     }
 
     public static boolean receiveAnswer() throws DisconnectException {
