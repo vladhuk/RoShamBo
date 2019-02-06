@@ -39,6 +39,13 @@ public class Room implements Serializable {
     public Account getPlayer2() {
         return player2;
     }
+
+    public Account getOpponent(Account player) {
+        if (player.equals(player1)) {
+            return player2;
+        }
+        return player1;
+    }
     
     public void addPlayer(Account player) {
         if (isFull()) {
@@ -64,5 +71,36 @@ public class Room implements Serializable {
     public String toString() {
         return title;
     }
-    
+
+    @Override
+    public int hashCode() {
+        int result = 0;
+
+        if (player1 != null) {
+            result += player1.hashCode();
+        }
+
+        if (player2 != null) {
+            result += player2.hashCode();
+        }
+
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+
+        Room object = (Room) obj;
+
+        return hashCode() == object.hashCode();
+    }
 }

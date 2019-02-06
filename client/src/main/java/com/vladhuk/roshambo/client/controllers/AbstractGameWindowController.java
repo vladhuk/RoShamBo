@@ -1,7 +1,7 @@
 package com.vladhuk.roshambo.client.controllers;
 
 import com.vladhuk.roshambo.client.logics.RoShamBo;
-import javafx.event.ActionEvent;
+import com.vladhuk.roshambo.server.Account;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -54,8 +54,8 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
         player = addPlayer();
         opponent = addOpponent();
 
-        playersNicknameLabel.setText(player.getName());
-        opponentsNicknameLabel.setText(opponent.getName());
+        playersNicknameLabel.setText(player.getAccount().getNickname());
+        opponentsNicknameLabel.setText(opponent.getAccount().getNickname());
 
         addCheckingImage(playersImageView);
         addCheckingImage(opponentsImageView);
@@ -63,20 +63,24 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
 
     public static class Player {
 
-        private String name;
+        private Account account;
         private int winsCounter = 0;
         private RoShamBo item;
 
-        public Player(String name) {
-            this.name = name;
+        public Player() {
+            account = new Account();
         }
 
-        public void setName(String name) {
-            this.name = name;
+        public Player(Account account) {
+            this.account = account;
         }
 
-        public String getName() {
-            return name;
+        public void setAccount(Account account) {
+            this.account = account;
+        }
+
+        public Account getAccount() {
+            return account;
         }
 
         public int getWinsCounter() {

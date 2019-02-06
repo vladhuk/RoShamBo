@@ -13,8 +13,8 @@ public class Server {
 
     private static Map<Integer, Account> accounts = Collections.synchronizedMap(new HashMap<>());
     private static Set<Integer> onlineAccounts = Collections.synchronizedSet(new HashSet<>());
-    private static List<Room> rooms = Collections.synchronizedList(new LinkedList<>());
-    private static List<Room> availableRooms = Collections.synchronizedList(new LinkedList<>());
+    private static Map<Integer, Room> rooms = Collections.synchronizedMap(new HashMap<>());
+    private static Set<Room> availableRooms = Collections.synchronizedSet(new HashSet<>());
 
     public static Map<Integer, Account> getAccounts() {
         return accounts;
@@ -24,11 +24,11 @@ public class Server {
         return onlineAccounts;
     }
 
-    public static List<Room> getRooms() {
+    public static Map<Integer, Room> getRooms() {
         return rooms;
     }
 
-    public static List<Room> getAvailableRooms() {
+    public static Set<Room> getAvailableRooms() {
         return availableRooms;
     }
 

@@ -11,11 +11,26 @@ import java.io.IOException;
 
 public abstract class AbstractWindowController {
 
+    private static FXMLLoader fxmlLoader;
+
     protected void changeWindow(Window window) throws IOException {
+        fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource(window.PATH_TO_FXML));
+
+        loadScene(window);
+    }
+
+    protected void changeWindow(Window window, AbstractWindowController controller) throws IOException {
+        fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource(window.PATH_TO_FXML));
+        fxmlLoader.setController(controller);
+
+        loadScene(window);
+    }
+
+    private void loadScene(Window window) throws IOException {
+        Parent root = fxmlLoader.load();
+
         Stage currentStage = getCurrentStage();
         currentStage.close();
-
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource(window.PATH_TO_FXML));
 
         Scene scene = new Scene(root);
         currentStage.setScene(scene);
@@ -25,20 +40,26 @@ public abstract class AbstractWindowController {
 
     protected abstract Stage getCurrentStage();
 
-    protected void newWindow(Window window, Stage newStage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource(window.PATH_TO_FXML));
+    public static void newWindow(Window window, Stage newStage) throws IOException {
+        fxmlLoader = new FXMLLoader(AbstractWindowController.class.getClassLoader().getResource(window.PATH_TO_FXML));
+
+        Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
         newStage.setScene(scene);
         newStage.setTitle(window.NAME);
         newStage.show();
     }
 
-    protected void showDisconnectAlert() {
+    protected void showAlert(String title, String description) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Roshambo -- Error");
-        alert.setHeaderText("Lost connection to server");
-        alert.setContentText("The game will continue in offline mode.");
+        alert.setHeaderText(title);
+        alert.setContentText(description);
         alert.showAndWait();
+    }
+
+    protected void showDisconnectAlert() {
+        showAlert("Lost connection to server", "The game will continue in offline mode.");
     }
 
 }

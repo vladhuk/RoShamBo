@@ -1,5 +1,6 @@
 package com.vladhuk.roshambo.client;
 
+import com.vladhuk.roshambo.client.controllers.AbstractWindowController;
 import com.vladhuk.roshambo.server.Account;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +19,7 @@ public class Client extends Application {
     public static final String DOC_PATH = System.getProperty("user.home") + "/Documents/Roshambo/";
     public static final Window LOGIN_WINDOW = new Window("RoShamBo -- Log in", "view/LoginWindow.fxml");
     public static final Window MENU_WINDOW = new Window("RoShamBo -- Menu", "view/MenuWindow.fxml");
-    public static final Window SINGLEPLAYER_WINDOW = new Window("RoShamBo -- Singleplayer", "view/GameWindow.fxml");
+    public static final Window GAME_WINDOW = new Window("RoShamBo -- Singleplayer", "view/GameWindow.fxml");
     public static final Window REGISTER_WINDOW = new Window("Roshambo -- Create account", "view/RegisterWindow.fxml");
     public static final Window CONNECTION_WINDOW = new Window("Roshambo -- Change server", "view/ConnectionWindow.fxml");
     public static final Window ROOMS_WINDOW = new Window("Roshambo -- Rooms", "view/RoomsWindow.fxml");
@@ -43,12 +44,9 @@ public class Client extends Application {
         String ip = Connection.loadIpFromFile();
         Connection.connect(ip);
 
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource(LOGIN_WINDOW.PATH_TO_FXML));
-        Scene loginScene = new Scene(root);
-        stage.setScene(loginScene);
-        stage.setTitle(LOGIN_WINDOW.NAME);
         stage.getIcons().add(new Image("images/RPS.png"));
-        stage.show();
+
+        AbstractWindowController.newWindow(LOGIN_WINDOW, stage);
     }
 
     private static void createConfigDirectory() {

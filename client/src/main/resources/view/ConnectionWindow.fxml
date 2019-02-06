@@ -29,6 +29,6 @@
             <Font name="Arial" size="12.0" />
          </font>
       </Label>
-      <Button id="save" layoutX="220.0" layoutY="36.0" mnemonicParsing="false" onAction="#saveIP" styleClass="iconButton" />
+      <Button id="save" focusTraversable="false" layoutX="220.0" layoutY="36.0" mnemonicParsing="false" onAction="#saveIP" styleClass="iconButton" />
    </children>
 </AnchorPane>

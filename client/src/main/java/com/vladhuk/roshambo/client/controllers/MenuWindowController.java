@@ -41,7 +41,7 @@ public class MenuWindowController extends AbstractWindowController implements In
 
     @FXML
     void openSingleplayer() throws IOException {
-        changeWindow(Client.SINGLEPLAYER_WINDOW);
+        changeWindow(Client.GAME_WINDOW, new SingleplayerWindowController());
     }
 
     @FXML

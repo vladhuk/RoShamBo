@@ -33,8 +33,7 @@ public class RoomSettingsWindowController extends AbstractWindowController {
             Room room = new Room(titleField.getText(), descriptionField.getText());
             room.addPlayer(Client.getAccount());
             sendRoom(room);
-
-            // TODO enter the game
+            changeWindow(Client.GAME_WINDOW, new OnlineGameWindowController());
         } catch (DisconnectException e) {
             showDisconnectAlert();
             changeWindow(Client.MENU_WINDOW);

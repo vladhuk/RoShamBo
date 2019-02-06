@@ -4,10 +4,14 @@ import java.io.Serializable;
 
 public class Account implements Serializable {
 
-    private String nickname;
-    private String password;
+    private String nickname = "";
+    private String password = "";
 
     public Account() {}
+
+    public Account(String nickname) {
+        this.nickname = nickname;
+    }
 
     public Account(String nickname, String password) {
         this.nickname = nickname;

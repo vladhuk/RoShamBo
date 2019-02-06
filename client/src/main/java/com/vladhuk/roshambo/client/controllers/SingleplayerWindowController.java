@@ -2,6 +2,7 @@ package com.vladhuk.roshambo.client.controllers;
 
 import com.vladhuk.roshambo.client.Client;
 import com.vladhuk.roshambo.client.logics.RoShamBo;
+import com.vladhuk.roshambo.server.Account;
 
 import java.io.IOException;
 
@@ -10,12 +11,12 @@ public class SingleplayerWindowController extends AbstractGameWindowController {
 
     @Override
     protected Player addPlayer() {
-        return new Player(Client.getAccount().getNickname());
+        return new Player(Client.getAccount());
     }
 
     @Override
     protected Player addOpponent() {
-        return new Player("Bot");
+        return new Player(new Account("Bot"));
     }
 
     @Override

@@ -72,6 +72,7 @@ public class RegisterWindowController extends AbstractAuthorizationWindowControl
         try {
             if (!sendAccountToServer(account)) {
                 informationLabel.setText("Account already exists");
+                return;
             }
         } catch (DisconnectException e) {
             reconnectButton.setVisible(true);
