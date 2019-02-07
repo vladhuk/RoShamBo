@@ -13,13 +13,13 @@ public abstract class AbstractWindowController {
 
     private static FXMLLoader fxmlLoader;
 
-    protected void changeWindow(Window window) throws IOException {
+    public void changeWindow(Window window) throws IOException {
         fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource(window.PATH_TO_FXML));
 
         loadScene(window);
     }
 
-    protected void changeWindow(Window window, AbstractWindowController controller) throws IOException {
+    public void changeWindow(Window window, AbstractWindowController controller) throws IOException {
         fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource(window.PATH_TO_FXML));
         fxmlLoader.setController(controller);
 
@@ -50,7 +50,7 @@ public abstract class AbstractWindowController {
         newStage.show();
     }
 
-    protected void showAlert(String title, String description) {
+    public void showAlert(String title, String description) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Roshambo -- Error");
         alert.setHeaderText(title);
@@ -58,7 +58,7 @@ public abstract class AbstractWindowController {
         alert.showAndWait();
     }
 
-    protected void showDisconnectAlert() {
+    public void showDisconnectAlert() {
         showAlert("Lost connection to server", "The game will continue in offline mode.");
     }
 

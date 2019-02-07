@@ -58,8 +58,16 @@ public class RoomsWindowController extends AbstractWindowController implements I
     }
 
     private void addTableListener() {
-        tableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            enterRoom(newValue);
+        tableView.setRowFactory( tv -> {
+            TableRow<Room> row = new TableRow<>();
+
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty()) ) {
+                    enterRoom(row.getItem());
+                }
+            });
+
+            return row ;
         });
     }
 

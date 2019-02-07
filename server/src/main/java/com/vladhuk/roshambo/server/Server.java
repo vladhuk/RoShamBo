@@ -12,7 +12,7 @@ public class Server {
     private static final int PORT = 5543;
 
     private static Map<Integer, Account> accounts = Collections.synchronizedMap(new HashMap<>());
-    private static Set<Integer> onlineAccounts = Collections.synchronizedSet(new HashSet<>());
+    private static Map<Integer, Commander> onlineAccounts = Collections.synchronizedMap(new HashMap<>());
     private static Map<Integer, Room> rooms = Collections.synchronizedMap(new HashMap<>());
     private static Set<Room> availableRooms = Collections.synchronizedSet(new HashSet<>());
 
@@ -20,7 +20,7 @@ public class Server {
         return accounts;
     }
 
-    public static Set<Integer> getOnlineAccounts() {
+    public static Map<Integer, Commander> getOnlineAccounts() {
         return onlineAccounts;
     }
 

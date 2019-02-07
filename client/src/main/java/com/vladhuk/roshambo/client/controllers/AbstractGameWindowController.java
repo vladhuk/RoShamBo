@@ -1,6 +1,7 @@
 package com.vladhuk.roshambo.client.controllers;
 
-import com.vladhuk.roshambo.client.logics.RoShamBo;
+import com.vladhuk.roshambo.client.Client;
+import com.vladhuk.roshambo.client.game.logics.RoShamBo;
 import com.vladhuk.roshambo.server.Account;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,8 +18,7 @@ import java.util.ResourceBundle;
 
 public abstract class AbstractGameWindowController extends AbstractWindowController implements Initializable {
 
-    private Player player;
-    private Player opponent;
+    public static final Account NULL_ACCOUNT = new Account("[empty]");
 
     @FXML
     private AnchorPane anchorPane;
@@ -39,10 +39,13 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
     private Label opponentsCounterLabel;
 
     @FXML
-    protected ImageView playersImageView;
+    private ImageView playersImageView;
 
     @FXML
-    protected ImageView opponentsImageView;
+    private ImageView opponentsImageView;
+
+    private Player player;
+    private Player opponent;
 
     @Override
     protected Stage getCurrentStage() {
@@ -51,28 +54,39 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        player = addPlayer();
-        opponent = addOpponent();
+        player = new Player(Client.getAccount(), playersImageView);
+        opponent = new Player(NULL_ACCOUNT, opponentsImageView);
 
         playersNicknameLabel.setText(player.getAccount().getNickname());
         opponentsNicknameLabel.setText(opponent.getAccount().getNickname());
 
-        addCheckingImage(playersImageView);
-        addCheckingImage(opponentsImageView);
+        init();
+        resetGame();
     }
 
-    public static class Player {
+    protected abstract void init();
+
+    public void resetGame() {
+        player.resetWinsCounter();
+        opponent.resetWinsCounter();
+
+        player.resetItem();
+        opponent.resetItem();
+
+        addCheckingImage(player.getImageView());
+        addCheckingImage(opponent.getImageView());
+    }
+
+    public class Player {
 
         private Account account;
         private int winsCounter = 0;
         private RoShamBo item;
+        private ImageView imageView;
 
-        public Player() {
-            account = new Account();
-        }
-
-        public Player(Account account) {
+        public Player(Account account, ImageView imageView) {
             this.account = account;
+            this.imageView = imageView;
         }
 
         public void setAccount(Account account) {
@@ -83,10 +97,6 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
             return account;
         }
 
-        public int getWinsCounter() {
-            return winsCounter;
-        }
-
         public int incrementAndGetWinsCounter() {
             return ++winsCounter;
         }
@@ -95,28 +105,40 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
             winsCounter = 0;
         }
 
-        public void setItem(RoShamBo item) {
+        public synchronized void setItem(RoShamBo item) {
             this.item = item;
         }
 
-        public RoShamBo getItem() {
+        public synchronized RoShamBo getItem() {
             return item;
         }
+
+        public synchronized void resetItem() {
+            item = null;
+        }
+
+        public ImageView getImageView() {
+            return imageView;
+        }
+
     }
 
-    protected Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
-    protected Player getOpponent() {
+    public Player getOpponent() {
         return opponent;
     }
 
-    protected abstract Player addPlayer();
+    public void setOpponent(Account account) {
+        opponent.setAccount(account);
+        opponentsNicknameLabel.setText(opponent.getAccount().getNickname());
 
-    protected abstract Player addOpponent();
+        resetGame();
+    }
 
-    protected void addCheckingImage(ImageView imageView) {
+    public void addCheckingImage(ImageView imageView) {
         imageView.setImage(new Image("images/Question.png"));
         imageView.setRotate(0);
     }
@@ -136,9 +158,9 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
         turn(RoShamBo.ROCK);
     }
 
-    protected abstract void turn(RoShamBo playersItem);
+    public abstract void turn(RoShamBo playersItem);
 
-    protected void showResult() {
+    public void showResult() {
         RoShamBo playersItem = player.getItem();
         RoShamBo opponentsItem = opponent.getItem();
 
@@ -147,19 +169,23 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
                 informationLabel.setTextFill(Color.GREEN);
                 informationLabel.setText("You win");
                 playersCounterLabel.setText(String.valueOf(player.incrementAndGetWinsCounter()));
-                return;
+                break;
             case LOSE:
                 informationLabel.setTextFill(Color.RED);
                 informationLabel.setText("You lose");
                 opponentsCounterLabel.setText(String.valueOf(opponent.incrementAndGetWinsCounter()));
-                return;
+                break;
             case DRAW:
                 informationLabel.setTextFill(Color.ORANGE);
                 informationLabel.setText("Draw");
+                break;
         }
+
+        player.resetItem();
+        opponent.resetItem();
     }
 
-    protected void updatePlayersItemImage() {
+    public void updatePlayersItemImage() {
         switch (player.getItem()) {
             case PAPER:
                 playersImageView.setImage(new Image("images/Paper1.png"));
@@ -176,7 +202,7 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
         }
     }
 
-    protected void updateOpponentsItemImage() {
+    public void updateOpponentsItemImage() {
         switch (opponent.getItem()) {
             case PAPER:
                 opponentsImageView.setImage(new Image("images/Paper2.png"));
@@ -191,6 +217,11 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
                 opponentsImageView.setRotate(0);
                 break;
         }
+    }
+
+    public void setInfo(String info) {
+        informationLabel.setTextFill(Color.BLACK);
+        informationLabel.setText(info);
     }
 
     @FXML

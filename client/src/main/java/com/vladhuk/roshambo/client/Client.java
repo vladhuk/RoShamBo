@@ -19,7 +19,7 @@ public class Client extends Application {
     public static final String DOC_PATH = System.getProperty("user.home") + "/Documents/Roshambo/";
     public static final Window LOGIN_WINDOW = new Window("RoShamBo -- Log in", "view/LoginWindow.fxml");
     public static final Window MENU_WINDOW = new Window("RoShamBo -- Menu", "view/MenuWindow.fxml");
-    public static final Window GAME_WINDOW = new Window("RoShamBo -- Singleplayer", "view/GameWindow.fxml");
+    public static final Window GAME_WINDOW = new Window("RoShamBo -- Game", "view/GameWindow.fxml");
     public static final Window REGISTER_WINDOW = new Window("Roshambo -- Create account", "view/RegisterWindow.fxml");
     public static final Window CONNECTION_WINDOW = new Window("Roshambo -- Change server", "view/ConnectionWindow.fxml");
     public static final Window ROOMS_WINDOW = new Window("Roshambo -- Rooms", "view/RoomsWindow.fxml");

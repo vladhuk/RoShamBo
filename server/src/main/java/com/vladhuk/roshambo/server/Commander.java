@@ -11,7 +11,7 @@ public class Commander {
         this.socket = socket;
     }
 
-    public synchronized void sendObject(Object object) throws DisconnectException {
+    public void sendObject(Object object) throws DisconnectException {
         try {
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
             out.writeObject(object);
@@ -21,7 +21,7 @@ public class Commander {
         }
     }
 
-    public synchronized Object receiveObject() throws DisconnectException {
+    public Object receiveObject() throws DisconnectException {
         Object object = null;
 
         try {
@@ -36,7 +36,7 @@ public class Commander {
         return object;
     }
 
-    public synchronized void sendInteger(int i) throws DisconnectException {
+    public void sendInteger(int i) throws DisconnectException {
         try {
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             out.writeInt(i);
@@ -46,7 +46,7 @@ public class Commander {
         }
     }
 
-    public synchronized int receiveInteger() throws DisconnectException {
+    public int receiveInteger() throws DisconnectException {
         try {
             DataInputStream i = new DataInputStream(socket.getInputStream());
             int id = i.readInt();
@@ -56,7 +56,7 @@ public class Commander {
         }
     }
 
-    public synchronized void sendAnswer(boolean answer) throws DisconnectException {
+    public void sendAnswer(boolean answer) throws DisconnectException {
         try {
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             out.writeBoolean(answer);
