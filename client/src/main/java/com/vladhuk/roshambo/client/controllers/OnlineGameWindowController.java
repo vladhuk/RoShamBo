@@ -14,12 +14,27 @@ import java.io.IOException;
 public class OnlineGameWindowController extends AbstractGameWindowController implements Initializable {
 
     private Thread gameHandler = new Thread(new OnlineGameHandler(this));
+    private Thread waitForOpponentThread;
     private volatile boolean isTurnable = false;
 
     @Override
     public void init() {
-        gameHandler.setDaemon(true);
         gameHandler.start();
+
+        Platform.runLater(() ->
+            getCurrentStage().getScene().getWindow().setOnCloseRequest(e -> {
+                if (isThreadRunning(waitForOpponentThread)) {
+                    waitForOpponentThread.interrupt();
+                }
+                leaveRoom();
+                Platform.exit();
+                System.exit(0);
+            })
+        );
+    }
+
+    private boolean isThreadRunning(Thread thread) {
+        return (thread != null) && thread.isAlive();
     }
 
     @Override
@@ -32,13 +47,14 @@ public class OnlineGameWindowController extends AbstractGameWindowController imp
         getPlayer().setItem(playersItem);
 
         updatePlayersItemImage();
+        addWaitingImage(getOpponent().getImageView());
         setInfo("Waiting for opponent...");
 
         try {
             Connection.sendObject(ServerCommand.ITEM);
             Connection.sendObject(playersItem.name());
 
-            checkForOpponent();
+            waitForOpponent();
         } catch (DisconnectException e) {
             disconnect();
         }
@@ -52,11 +68,15 @@ public class OnlineGameWindowController extends AbstractGameWindowController imp
         isTurnable = turnable;
     }
 
-    private void checkForOpponent() {
-        Thread thread = new Thread(() -> {
+    private void waitForOpponent() {
+        waitForOpponentThread = new Thread(() -> {
             while (getOpponent().getItem() == null) {
+                if (isOpponentDeleted() || Thread.interrupted()) {
+                    return;
+                }
                 Thread.yield();
             }
+
             Platform.runLater(() -> {
                 updateOpponentsItemImage();
                 showResult();
@@ -64,8 +84,12 @@ public class OnlineGameWindowController extends AbstractGameWindowController imp
 
             setTurnable(true);
         });
-        thread.setDaemon(true);
-        thread.start();
+        waitForOpponentThread.setDaemon(true);
+        waitForOpponentThread.start();
+    }
+
+    private boolean isOpponentDeleted() {
+        return getOpponent().equals(NULL_ACCOUNT);
     }
 
     private void disconnect() {
@@ -81,6 +105,18 @@ public class OnlineGameWindowController extends AbstractGameWindowController imp
 
     @Override
     void back() throws IOException {
+        leaveRoom();
         changeWindow(Client.ROOMS_WINDOW);
     }
+
+    private void leaveRoom() {
+        try {
+            Connection.sendObject(ServerCommand.LEAVE_ROOM);
+            gameHandler.interrupt();
+        } catch (DisconnectException e) {
+            disconnect();
+        }
+    }
+
+
 }

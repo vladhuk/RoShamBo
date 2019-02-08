@@ -7,7 +7,7 @@
     <parent>
         <artifactId>RoShamBo</artifactId>
         <groupId>com.vladhuk</groupId>
-        <version>0.9-SNAPSHOT</version>
+        <version>0.9</version>
     </parent>
 
     <artifactId>client</artifactId>
@@ -98,13 +98,13 @@
                                 <jdkPreference>preferJre</jdkPreference>
                             </jre>
                             <versionInfo>
-                                <fileVersion>0.8.0.1</fileVersion>
+                                <fileVersion>0.9.0.0</fileVersion>
                                 <txtFileVersion>${project.version}</txtFileVersion>
                                 <fileDescription>${project.name}</fileDescription>
-                                <copyright>2019 Vlad Hukovskii</copyright>
+                                <copyright>2019 Vladislav Hukovskii</copyright>
                                 <companyName>vladhuk</companyName>
-                                <productVersion>0.8.0.0</productVersion>
-                                <txtProductVersion>0.8.0.0</txtProductVersion>
+                                <productVersion>0.9.0.0</productVersion>
+                                <txtProductVersion>0.9.0.0</txtProductVersion>
                                 <productName>${project.name}</productName>
                                 <internalName>RoShamBo</internalName>
                                 <originalFilename>RoShamBo.exe</originalFilename>

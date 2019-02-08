@@ -11,8 +11,10 @@ public class ClientHandler implements Runnable {
     private Commander commander;
     private Account account;
     private Room room;
+    private Thread waitForOpponentThread;
 
     public ClientHandler(Socket socket) {
+        System.out.println("New connection: " + socket.getRemoteSocketAddress().toString());
         this.socket = socket;
         this.commander = new Commander(socket);
     }
@@ -42,12 +44,20 @@ public class ClientHandler implements Runnable {
                         break;
                     case ADD_ROOM:
                         addRoom();
+                        waitForOpponent();
                         break;
                     case ENTER_ROOM:
                         enterRoom();
                         break;
                     case ITEM:
                         resendItem();
+                        break;
+                    case LEAVE_ROOM:
+                        commander.sendObject(ServerCommand.STOP);
+                        leaveRoom();
+                        break;
+                    case NEW_OPPONENT:
+                        waitForOpponent();
                         break;
                 }
 
@@ -67,7 +77,7 @@ public class ClientHandler implements Runnable {
         if (answer) {
             account = Server.getAccounts().get(id);
             commander.sendObject(account);
-            Server.getOnlineAccounts().put(id, commander);
+            Server.getOnlineAccounts().put(id, this);
         }
     }
 
@@ -76,7 +86,7 @@ public class ClientHandler implements Runnable {
     }
 
     private boolean isAccountOnline(int id) {
-        return Server.getOnlineAccounts().entrySet().contains(id);
+        return Server.getOnlineAccounts().keySet().contains(id);
     }
 
     private void createAccount() throws DisconnectException {
@@ -88,7 +98,7 @@ public class ClientHandler implements Runnable {
 
         if (answer) {
             Server.getAccounts().put(id, account);
-            Server.getOnlineAccounts().put(id, commander);
+            Server.getOnlineAccounts().put(id, this);
             this.account = account;
         }
     }
@@ -108,7 +118,7 @@ public class ClientHandler implements Runnable {
     }
 
     private void sendAvailableRoomsList() throws DisconnectException {
-        List list = new LinkedList(Server.getAvailableRooms());
+        List<Room> list = new LinkedList<>(Server.getAvailableRooms());
         commander.sendObject(list);
     }
 
@@ -118,14 +128,37 @@ public class ClientHandler implements Runnable {
 
         Server.getRooms().put(id, room);
         Server.getAvailableRooms().add(room);
+    }
 
+    public void waitForOpponent() {
+        waitForOpponentThread = new Thread(new WaitForOpponent(room));
+        waitForOpponentThread.start();
+    }
 
-        while (!room.isFull()) {
-            Thread.yield();
+    private class WaitForOpponent implements Runnable {
+        private Room room;
+
+        private WaitForOpponent(Room room) {
+            this.room = room;
         }
 
-        commander.sendObject(ServerCommand.NEW_OPPONENT);
-        commander.sendObject(room.getOpponent(account));
+        @Override
+        public void run() {
+            while ((room != null) && !room.isFull()) {
+                Thread.yield();
+            }
+
+            if (room == null) {
+                return;
+            }
+
+            try {
+                commander.sendObject(ServerCommand.NEW_OPPONENT);
+                commander.sendObject(room.getOpponent(account));
+            } catch (DisconnectException e) {
+                disconnect();
+            }
+        }
     }
 
     private void enterRoom() throws DisconnectException {
@@ -151,16 +184,58 @@ public class ClientHandler implements Runnable {
     private void resendItem() throws DisconnectException {
         String item = (String) commander.receiveObject();
 
-        Commander opponentsCommander = Server.getOnlineAccounts().get(room.getOpponent(account).hashCode());
-        opponentsCommander.sendObject(ServerCommand.ITEM);
-        opponentsCommander.sendObject(item);
+        ClientHandler opponentsHandler = Server.getOnlineAccounts().get(room.getOpponent(account).hashCode());
+        Commander opponentsCommander = opponentsHandler.getCommander();
+        try {
+            opponentsCommander.sendObject(ServerCommand.ITEM);
+            opponentsCommander.sendObject(item);
+        } catch (DisconnectException e) {
+            opponentsHandler.disconnect();
+        }
     }
 
-    private void disconnect() {
+    private void leaveRoom() {
+        if (isThreadRunning(waitForOpponentThread)) {
+            waitForOpponentThread.interrupt();
+        }
+
+        Account opponent = room.getOpponent(account);
+
+        if (opponent == null) {
+            Server.getRooms().remove(room.hashCode());
+            Server.getAvailableRooms().remove(room);
+            room = null;
+            return;
+        }
+
+        room.removePlayer(account);
+
+        ClientHandler opponentsHandler = Server.getOnlineAccounts().get(opponent.hashCode());
+        Commander opponentsCommander = opponentsHandler.getCommander();
+        try {
+            opponentsCommander.sendObject(ServerCommand.LEAVE_ROOM);
+        } catch (DisconnectException e) {
+            opponentsHandler.disconnect();
+        }
+
+        Server.getAvailableRooms().add(room);
+    }
+
+    private boolean isThreadRunning(Thread thread) {
+        return (thread != null) && thread.isAlive();
+    }
+
+    public void disconnect() {
         System.out.println(socket.getRemoteSocketAddress().toString() + " was disconnected.");
+
         if (account != null) {
             Server.getOnlineAccounts().remove(account.hashCode());
         }
+
+        if (room != null) {
+            leaveRoom();
+        }
+
         commander.closeSocket();
     }
 

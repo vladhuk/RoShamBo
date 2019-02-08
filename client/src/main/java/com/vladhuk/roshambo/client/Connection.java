@@ -11,13 +11,17 @@ public class Connection {
     private static final File IP_FILE = new File(Client.DOC_PATH + "ip.dat");
     private static final int PORT = 5543;
 
-    private static Socket socket;
     private static Commander commander;
     private static String ip = "";
     private static boolean isConnected = false;
 
-    public static String getIp() {
+
+    public static String getIP() {
         return ip;
+    }
+
+    private static void setIP(String ip) {
+        Connection.ip = ip;
     }
 
     public static void saveIpToFile(String ip) {
@@ -43,48 +47,54 @@ public class Connection {
         return ip;
     }
 
+    public static boolean isConnected() {
+        return isConnected;
+    }
+
+    private static void setConnection(boolean isConnected) {
+        Connection.isConnected = isConnected;
+    }
+
     public static boolean connect(String ip) {
-        if (commander != null) {
-            commander.closeSocket();
-        }
+        boolean result = true;
 
         try {
-            socket = new Socket(ip, PORT);
+            Socket socket = new Socket(ip, PORT);
+            commander = new Commander(socket);
+            setIP(ip);
+            setConnection(true);
         } catch (IOException e) {
-            isConnected = false;
-            return false;
+            setConnection(false);
+            result = false;
         }
 
-        commander = new Commander(socket);
-        Connection.ip = ip;
-        isConnected = true;
-
-        return true;
+        return result;
     }
 
     public static boolean reconnect() {
-        if (isConnected) {
+        if (isConnected()) {
             return true;
         }
 
-        if (!connect(ip)) {
-            isConnected = false;
+        if (!connect(getIP())) {
+            setConnection(false);
             return false;
         }
 
-        isConnected = true;
+        setConnection(true);
         return true;
     }
 
-    public static boolean isConnected() {
-        return isConnected;
+    private static void disconnect() {
+        commander.closeSocket();
+        setConnection(false);
     }
 
     public static void sendObject(Object object) throws DisconnectException {
         try {
             commander.sendObject(object);
         } catch (DisconnectException e) {
-            isConnected = false;
+            disconnect();
             throw e;
         }
     }
@@ -95,7 +105,7 @@ public class Connection {
         try {
             object = commander.receiveObject();
         } catch (DisconnectException e) {
-            isConnected = false;
+            disconnect();
             throw e;
         }
 
@@ -106,7 +116,7 @@ public class Connection {
         try {
             commander.sendInteger(i);
         } catch (DisconnectException e) {
-            isConnected = false;
+            disconnect();
             throw e;
         }
     }
@@ -117,7 +127,7 @@ public class Connection {
         try {
             i = commander.receiveInteger();
         } catch (DisconnectException e) {
-            isConnected = false;
+            disconnect();
             throw e;
         }
 
@@ -130,7 +140,7 @@ public class Connection {
         try {
             answer = commander.receiveAnswer();
         } catch (DisconnectException e) {
-            isConnected = false;
+            disconnect();
             throw e;
         }
 

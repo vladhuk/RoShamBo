@@ -12,7 +12,7 @@ public class Server {
     private static final int PORT = 5543;
 
     private static Map<Integer, Account> accounts = Collections.synchronizedMap(new HashMap<>());
-    private static Map<Integer, Commander> onlineAccounts = Collections.synchronizedMap(new HashMap<>());
+    private static Map<Integer, ClientHandler> onlineAccounts = Collections.synchronizedMap(new HashMap<>());
     private static Map<Integer, Room> rooms = Collections.synchronizedMap(new HashMap<>());
     private static Set<Room> availableRooms = Collections.synchronizedSet(new HashSet<>());
 
@@ -20,7 +20,7 @@ public class Server {
         return accounts;
     }
 
-    public static Map<Integer, Commander> getOnlineAccounts() {
+    public static Map<Integer, ClientHandler> getOnlineAccounts() {
         return onlineAccounts;
     }
 
@@ -40,7 +40,6 @@ public class Server {
 
             while (true) {
                 Socket clientSocket = serverSocket.accept();
-                System.out.println("New connection: " + clientSocket.getRemoteSocketAddress().toString());
                 executorService.execute(new ClientHandler(clientSocket));
             }
 

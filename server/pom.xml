@@ -7,17 +7,53 @@
     <parent>
         <artifactId>RoShamBo</artifactId>
         <groupId>com.vladhuk</groupId>
-        <version>0.9-SNAPSHOT</version>
+        <version>0.9</version>
     </parent>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-            <version>11.0.2</version>
-        </dependency>
-    </dependencies>
-
     <artifactId>server</artifactId>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                <artifactId>launch4j-maven-plugin</artifactId>
+                <version>1.7.25</version>
+                <executions>
+                    <execution>
+                        <id>l4j-clui</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>launch4j</goal>
+                        </goals>
+                        <configuration>
+                            <headerType>console</headerType>
+                            <jar>${project.build.directory}/${project.artifactId}-${project.version}.jar</jar>
+                            <outfile>${project.build.directory}/RoShamBo-server.exe</outfile>
+                            <downloadUrl>http://java.com/download</downloadUrl>
+                            <classPath>
+                                <mainClass>com.vladhuk.roshambo.server.Server</mainClass>
+                            </classPath>
+                            <jre>
+                                <minVersion>8</minVersion>
+                                <jdkPreference>preferJre</jdkPreference>
+                            </jre>
+                            <versionInfo>
+                                <fileVersion>0.9.0.0</fileVersion>
+                                <txtFileVersion>${project.version}</txtFileVersion>
+                                <fileDescription>${project.name}</fileDescription>
+                                <copyright>2019 Vladislav Hukovskii</copyright>
+                                <companyName>vladhuk</companyName>
+                                <productVersion>0.9.0.0</productVersion>
+                                <txtProductVersion>0.9.0.0</txtProductVersion>
+                                <productName>${project.name}</productName>
+                                <internalName>RoShamBo-server</internalName>
+                                <originalFilename>RoShamBo-server.exe</originalFilename>
+                            </versionInfo>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

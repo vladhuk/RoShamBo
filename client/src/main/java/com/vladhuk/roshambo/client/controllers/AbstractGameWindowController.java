@@ -21,7 +21,7 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
     public static final Account NULL_ACCOUNT = new Account("[empty]");
 
     @FXML
-    private AnchorPane anchorPane;
+    protected AnchorPane anchorPane;
 
     @FXML
     private Label informationLabel;
@@ -54,8 +54,8 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        player = new Player(Client.getAccount(), playersImageView);
-        opponent = new Player(NULL_ACCOUNT, opponentsImageView);
+        player = new Player(Client.getAccount(), playersImageView, playersCounterLabel);
+        opponent = new Player(NULL_ACCOUNT, opponentsImageView, opponentsCounterLabel);
 
         playersNicknameLabel.setText(player.getAccount().getNickname());
         opponentsNicknameLabel.setText(opponent.getAccount().getNickname());
@@ -66,27 +66,29 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
 
     protected abstract void init();
 
-    public void resetGame() {
+    private void resetGame() {
         player.resetWinsCounter();
         opponent.resetWinsCounter();
 
-        player.resetItem();
-        opponent.resetItem();
+        player.setItem(null);
+        opponent.setItem(null);
 
-        addCheckingImage(player.getImageView());
-        addCheckingImage(opponent.getImageView());
+        addWaitingImage(player.getImageView());
+        addWaitingImage(opponent.getImageView());
     }
 
     public class Player {
 
         private Account account;
         private int winsCounter = 0;
+        private Label winsCounterLabel;
         private RoShamBo item;
         private ImageView imageView;
 
-        public Player(Account account, ImageView imageView) {
+        public Player(Account account, ImageView imageView, Label winsCounterLabel) {
             this.account = account;
             this.imageView = imageView;
+            this.winsCounterLabel = winsCounterLabel;
         }
 
         public void setAccount(Account account) {
@@ -97,12 +99,14 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
             return account;
         }
 
-        public int incrementAndGetWinsCounter() {
-            return ++winsCounter;
+        public void incrementWinsCounter() {
+            winsCounter++;
+            winsCounterLabel.setText(String.valueOf(winsCounter));
         }
 
         public void resetWinsCounter() {
             winsCounter = 0;
+            winsCounterLabel.setText("0");
         }
 
         public synchronized void setItem(RoShamBo item) {
@@ -111,10 +115,6 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
 
         public synchronized RoShamBo getItem() {
             return item;
-        }
-
-        public synchronized void resetItem() {
-            item = null;
         }
 
         public ImageView getImageView() {
@@ -138,7 +138,7 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
         resetGame();
     }
 
-    public void addCheckingImage(ImageView imageView) {
+    public void addWaitingImage(ImageView imageView) {
         imageView.setImage(new Image("images/Question.png"));
         imageView.setRotate(0);
     }
@@ -168,12 +168,12 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
             case WIN:
                 informationLabel.setTextFill(Color.GREEN);
                 informationLabel.setText("You win");
-                playersCounterLabel.setText(String.valueOf(player.incrementAndGetWinsCounter()));
+                player.incrementWinsCounter();
                 break;
             case LOSE:
                 informationLabel.setTextFill(Color.RED);
                 informationLabel.setText("You lose");
-                opponentsCounterLabel.setText(String.valueOf(opponent.incrementAndGetWinsCounter()));
+                opponent.incrementWinsCounter();
                 break;
             case DRAW:
                 informationLabel.setTextFill(Color.ORANGE);
@@ -181,8 +181,8 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
                 break;
         }
 
-        player.resetItem();
-        opponent.resetItem();
+        player.setItem(null);
+        opponent.setItem(null);
     }
 
     public void updatePlayersItemImage() {

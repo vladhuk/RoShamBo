@@ -25,7 +25,7 @@ public class ConnectionWindowController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            currentIpLabel.setText("Current ip: " + Connection.getIp());
+            currentIpLabel.setText("Current ip: " + Connection.getIP());
             ipTextField.setText(Connection.loadIpFromFile());
         } catch (IOException e) {
             e.printStackTrace();

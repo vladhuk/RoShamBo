@@ -32,7 +32,15 @@ public class OnlineGameHandler implements Runnable {
                     case ITEM:
                         setItem();
                         break;
+                    case LEAVE_ROOM:
+                        deleteOpponent();
+                        break;
+                    case STOP:
+                        Thread.currentThread().interrupt();
+                        break;
                 }
+
+                Thread.yield();
             }
         } catch (DisconnectException e) {
             disconnect();
@@ -53,7 +61,16 @@ public class OnlineGameHandler implements Runnable {
         Platform.runLater(() -> {
             opponent.setItem(item);
             controller.setInfo("Waiting for your turn...");
-            controller.addCheckingImage(opponent.getImageView());
+            controller.addWaitingImage(opponent.getImageView());
+        });
+    }
+
+    private void deleteOpponent() throws DisconnectException {
+        Connection.sendObject(ServerCommand.NEW_OPPONENT);
+
+        Platform.runLater(() -> {
+            controller.setOpponent(AbstractGameWindowController.NULL_ACCOUNT);
+            controller.setTurnable(false);
         });
     }
 

@@ -1,6 +1,7 @@
 package com.vladhuk.roshambo.server;
 
 import java.io.Serializable;
+import java.util.Random;
 
 public class Room implements Serializable {
     
@@ -8,6 +9,7 @@ public class Room implements Serializable {
     private String description = "";
     private Account player1;
     private Account player2;
+    private long id = new Random().nextLong();
 
     public Room() {}
 
@@ -50,6 +52,14 @@ public class Room implements Serializable {
             player2 = player;
         }
     }
+
+    public void removePlayer(Account account) {
+        if (player1.equals(account)) {
+            player1 = null;
+        } else {
+            player2 = null;
+        }
+    }
     
     @Override
     public String toString() {
@@ -68,7 +78,7 @@ public class Room implements Serializable {
             result += player2.hashCode();
         }
 
-        return result;
+        return (int) (id ^ (id >>> 32));
     }
 
     @Override
@@ -85,6 +95,6 @@ public class Room implements Serializable {
 
         Room object = (Room) obj;
 
-        return hashCode() == object.hashCode();
+        return id == object.id;
     }
 }
