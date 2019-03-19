@@ -2,7 +2,7 @@ package com.vladhuk.roshambo.client.controllers;
 
 import com.vladhuk.roshambo.client.Client;
 import com.vladhuk.roshambo.client.game.logics.RoShamBo;
-import com.vladhuk.roshambo.server.Account;
+import com.vladhuk.roshambo.server.models.Account;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -27,10 +27,10 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
     private Label informationLabel;
 
     @FXML
-    private Label playersNicknameLabel;
+    private Label playersUsernameLabel;
 
     @FXML
-    private Label opponentsNicknameLabel;
+    private Label opponentsUsernameLabel;
 
     @FXML
     private Label playersCounterLabel;
@@ -57,8 +57,8 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
         player = new Player(Client.getAccount(), playersImageView, playersCounterLabel);
         opponent = new Player(NULL_ACCOUNT, opponentsImageView, opponentsCounterLabel);
 
-        playersNicknameLabel.setText(player.getAccount().getNickname());
-        opponentsNicknameLabel.setText(opponent.getAccount().getNickname());
+        playersUsernameLabel.setText(player.getAccount().getUsername());
+        opponentsUsernameLabel.setText(opponent.getAccount().getUsername());
 
         init();
         resetGame();
@@ -133,7 +133,7 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
 
     public void setOpponent(Account account) {
         opponent.setAccount(account);
-        opponentsNicknameLabel.setText(opponent.getAccount().getNickname());
+        opponentsUsernameLabel.setText(opponent.getAccount().getUsername());
 
         resetGame();
     }

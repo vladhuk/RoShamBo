@@ -1,5 +1,8 @@
 package com.vladhuk.roshambo.server;
 
+import com.vladhuk.roshambo.server.models.Account;
+import com.vladhuk.roshambo.server.services.AccountService;
+
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,6 +10,7 @@ import java.util.Set;
 
 public class ClientHandler implements Runnable {
 
+    private AccountService accountService = new AccountService();
     private Socket socket;
     private Commander commander;
     private Account account;
@@ -59,6 +63,9 @@ public class ClientHandler implements Runnable {
                     case NEW_OPPONENT:
                         waitForOpponent();
                         break;
+                    case EXIT:
+                        exitFromAccount();
+                        break;
                 }
 
                 Thread.yield();
@@ -70,47 +77,33 @@ public class ClientHandler implements Runnable {
 
 
     private void login() throws DisconnectException {
-        int id = commander.receiveInteger();
+        account = (Account) commander.receiveObject();
+        account = accountService.find(account);
 
-        boolean answer = isAccountExist(id) & !isAccountOnline(id);
+        boolean answer = (account != null) && !isAccountOnline();
         commander.sendAnswer(answer);
+
         if (answer) {
-            account = Server.getAccounts().get(id);
-            commander.sendObject(account);
-            Server.getOnlineAccounts().put(id, this);
+            Server.getOnlineAccounts().put(account, this);
         }
     }
 
-    private boolean isAccountExist(int id) {
-        return Server.getAccounts().keySet().contains(id);
-    }
-
-    private boolean isAccountOnline(int id) {
-        return Server.getOnlineAccounts().keySet().contains(id);
+    private boolean isAccountOnline() {
+        return Server.getOnlineAccounts().containsKey(account);
     }
 
     private void createAccount() throws DisconnectException {
-        Account account = (Account) commander.receiveObject();
-        int id = account.hashCode();
+        account = (Account) commander.receiveObject();
 
-        boolean answer = !isAccountExist(id) & !isNicknameExist(account.getNickname());
+        Account foundedAccount = accountService.find(account);
+
+        boolean answer = (foundedAccount == null) && !accountService.isUsernameExist(account);
         commander.sendAnswer(answer);
 
         if (answer) {
-            Server.getAccounts().put(id, account);
-            Server.getOnlineAccounts().put(id, this);
-            this.account = account;
+            accountService.save(account);
+            Server.getOnlineAccounts().put(account, this);
         }
-    }
-
-    private boolean isNicknameExist(String nickname) {
-        for (Account account : Server.getAccounts().values()) {
-            if (account.getNickname().equals(nickname)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     private void sendUsersNumber() throws DisconnectException {
@@ -130,7 +123,7 @@ public class ClientHandler implements Runnable {
         Server.getAvailableRooms().add(room);
     }
 
-    public void waitForOpponent() {
+    private void waitForOpponent() {
         waitForOpponentThread = new Thread(new WaitForOpponent(room));
         waitForOpponentThread.start();
     }
@@ -184,7 +177,7 @@ public class ClientHandler implements Runnable {
     private void resendItem() throws DisconnectException {
         String item = (String) commander.receiveObject();
 
-        ClientHandler opponentsHandler = Server.getOnlineAccounts().get(room.getOpponent(account).hashCode());
+        ClientHandler opponentsHandler = Server.getOnlineAccounts().get(room.getOpponent(account));
         Commander opponentsCommander = opponentsHandler.getCommander();
         try {
             opponentsCommander.sendObject(ServerCommand.ITEM);
@@ -210,7 +203,7 @@ public class ClientHandler implements Runnable {
 
         room.removePlayer(account);
 
-        ClientHandler opponentsHandler = Server.getOnlineAccounts().get(opponent.hashCode());
+        ClientHandler opponentsHandler = Server.getOnlineAccounts().get(opponent);
         Commander opponentsCommander = opponentsHandler.getCommander();
         try {
             opponentsCommander.sendObject(ServerCommand.LEAVE_ROOM);
@@ -228,15 +221,19 @@ public class ClientHandler implements Runnable {
     public void disconnect() {
         System.out.println(socket.getRemoteSocketAddress().toString() + " was disconnected.");
 
-        if (account != null) {
-            Server.getOnlineAccounts().remove(account.hashCode());
-        }
+        exitFromAccount();
 
         if (room != null) {
             leaveRoom();
         }
 
         commander.closeSocket();
+    }
+
+    private void exitFromAccount() {
+        if (account != null) {
+            Server.getOnlineAccounts().remove(account);
+        }
     }
 
 }

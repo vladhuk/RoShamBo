@@ -2,7 +2,7 @@ package com.vladhuk.roshambo.client.controllers;
 
 import com.vladhuk.roshambo.client.Client;
 import com.vladhuk.roshambo.client.Connection;
-import com.vladhuk.roshambo.server.Account;
+import com.vladhuk.roshambo.server.models.Account;
 import com.vladhuk.roshambo.server.DisconnectException;
 import com.vladhuk.roshambo.server.ServerCommand;
 import javafx.collections.ObservableList;
@@ -23,7 +23,7 @@ public class RegisterWindowController extends AbstractAuthorizationWindowControl
     private Button reconnectButton;
 
     @FXML
-    private TextField nicknameField;
+    private TextField usernameField;
 
     @FXML
     private PasswordField passwordField;
@@ -32,7 +32,7 @@ public class RegisterWindowController extends AbstractAuthorizationWindowControl
     private PasswordField confirmField;
 
     @FXML
-    private Label nicknameLabel;
+    private Label usernameLabel;
 
     @FXML
     private Label passwordLabel;
@@ -67,7 +67,7 @@ public class RegisterWindowController extends AbstractAuthorizationWindowControl
             return;
         }
 
-        Account account = new Account(nicknameField.getText(), passwordField.getText());
+        Account account = new Account(usernameField.getText(), passwordField.getText());
 
         try {
             if (!sendAccountToServer(account)) {
@@ -85,7 +85,7 @@ public class RegisterWindowController extends AbstractAuthorizationWindowControl
     }
 
     private boolean checkFields() {
-        return isFieldCorrectly(nicknameField, nicknameLabel) & isFieldCorrectly(passwordField, passwordLabel)
+        return isFieldCorrectly(usernameField, usernameLabel) & isFieldCorrectly(passwordField, passwordLabel)
                 & isConfirmed();
     }
 

@@ -6,6 +6,7 @@ import com.vladhuk.roshambo.client.controllers.AbstractGameWindowController;
 import com.vladhuk.roshambo.client.controllers.OnlineGameWindowController;
 import com.vladhuk.roshambo.client.game.logics.RoShamBo;
 import com.vladhuk.roshambo.server.*;
+import com.vladhuk.roshambo.server.models.Account;
 import javafx.application.Platform;
 
 import java.io.IOException;

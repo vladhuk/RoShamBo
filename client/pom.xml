@@ -7,7 +7,7 @@
     <parent>
         <artifactId>RoShamBo</artifactId>
         <groupId>com.vladhuk</groupId>
-        <version>0.9</version>
+        <version>0.9.1</version>
     </parent>
 
     <artifactId>client</artifactId>
@@ -28,9 +28,10 @@
         <dependency>
             <groupId>com.vladhuk</groupId>
             <artifactId>server</artifactId>
-            <version>0.9-SNAPSHOT</version>
+            <version>0.9.1</version>
             <scope>compile</scope>
         </dependency>
+
     </dependencies>
 
     <build>

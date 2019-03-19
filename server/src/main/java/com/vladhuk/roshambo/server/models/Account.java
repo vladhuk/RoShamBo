@@ -1,29 +1,43 @@
-package com.vladhuk.roshambo.server;
+package com.vladhuk.roshambo.server.models;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
+@Entity
+@Table(name = "account")
 public class Account implements Serializable {
 
-    private String nickname = "";
+    @Id
+    @GeneratedValue
+    private int id;
+    private String username = "";
     private String password = "";
 
     public Account() {}
 
-    public Account(String nickname) {
-        this.nickname = nickname;
+    public Account(String username) {
+        this.username = username;
     }
 
-    public Account(String nickname, String password) {
-        this.nickname = nickname;
+    public Account(String username, String password) {
+        this.username = username;
         this.password = password;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public int getId() {
+        return id;
     }
 
-    public String getNickname() {
-        return nickname;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setUsername(String nickname) {
+        this.username = nickname;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public void setPassword(String password) {
@@ -36,7 +50,7 @@ public class Account implements Serializable {
 
     @Override
     public String toString() {
-        return nickname;
+        return username;
     }
 
     @Override
@@ -53,14 +67,14 @@ public class Account implements Serializable {
 
         Account object = (Account) obj;
 
-        return object.nickname.equals(nickname) && object.password.equals(password);
+        return object.username.equals(username) && object.password.equals(password);
     }
 
     @Override
     public int hashCode() {
         int result = 0;
 
-        result += 37 * result + nickname.hashCode();
+        result += 37 * result + username.hashCode();
         result += 37 * result + password.hashCode();
 
         return result;

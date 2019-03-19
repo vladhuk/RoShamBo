@@ -3,6 +3,7 @@ package com.vladhuk.roshambo.client.controllers;
 import com.vladhuk.roshambo.client.Client;
 import com.vladhuk.roshambo.client.Connection;
 import com.vladhuk.roshambo.server.*;
+import com.vladhuk.roshambo.server.models.Account;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -31,13 +32,13 @@ public class LoginWindowController extends AbstractAuthorizationWindowController
     private Button createAccountButton;
 
     @FXML
-    private TextField nicknameField;
+    private TextField usernameField;
 
     @FXML
     private PasswordField passwordField;
 
     @FXML
-    private Label nicknameLabel;
+    private Label usernameLabel;
 
     @FXML
     private Label passwordLabel;
@@ -89,7 +90,7 @@ public class LoginWindowController extends AbstractAuthorizationWindowController
             if (!reader.ready()) {
                 return;
             }
-            nicknameField.setText(reader.readLine());
+            usernameField.setText(reader.readLine());
             passwordField.setText(reader.readLine());
             rememberBox.fire();
         } catch (FileNotFoundException e) {
@@ -115,13 +116,12 @@ public class LoginWindowController extends AbstractAuthorizationWindowController
             return;
         }
 
-        Account account = new Account(nicknameField.getText(), passwordField.getText());
+        Account account = new Account(usernameField.getText(), passwordField.getText());
 
         if (Connection.isConnected()) {
             try {
-                account = loadAccountFromServer(account);
-                if (account == null) {
-                    informationLabel.setText("Invalid nickname or password");
+                if (!isAccountExist(account)) {
+                    informationLabel.setText("Invalid username or password");
                     return;
                 }
             } catch (DisconnectException e) {
@@ -145,7 +145,7 @@ public class LoginWindowController extends AbstractAuthorizationWindowController
     private boolean checkFields() {
         boolean result = true;
 
-        if (!isFieldCorrectly(nicknameField, nicknameLabel)) {
+        if (!isFieldCorrectly(usernameField, usernameLabel)) {
             result = false;
         }
 
@@ -156,23 +156,18 @@ public class LoginWindowController extends AbstractAuthorizationWindowController
         return result;
     }
 
-    private Account loadAccountFromServer(Account account) throws DisconnectException {
+    private boolean isAccountExist(Account account) throws DisconnectException {
         Connection.sendObject(ServerCommand.LOGIN);
-        Connection.sendInteger(account.hashCode());
-
-        Account serverAccount = null;
+        Connection.sendObject(account);
 
         boolean answer = Connection.receiveAnswer();
-        if (answer) {
-            serverAccount = (Account) Connection.receiveObject();
-        }
 
-        return serverAccount;
+        return answer;
     }
 
     private void saveFields() throws IOException {
         try (PrintWriter writer = new PrintWriter(ACCOUNT_FILE)) {
-            writer.println(nicknameField.getText());
+            writer.println(usernameField.getText());
             writer.println(passwordField.getText());
         }
     }

@@ -1,5 +1,7 @@
 package com.vladhuk.roshambo.server;
 
+import com.vladhuk.roshambo.server.models.Account;
+
 import java.io.Serializable;
 import java.util.Random;
 

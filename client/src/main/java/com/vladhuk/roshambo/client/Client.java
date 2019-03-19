@@ -1,11 +1,8 @@
 package com.vladhuk.roshambo.client;
 
 import com.vladhuk.roshambo.client.controllers.AbstractWindowController;
-import com.vladhuk.roshambo.server.Account;
+import com.vladhuk.roshambo.server.models.Account;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 

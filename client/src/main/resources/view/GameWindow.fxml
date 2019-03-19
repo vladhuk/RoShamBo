@@ -19,12 +19,12 @@
             <Font name="Arial Bold" size="28.0" />
          </font>
       </Label>
-      <Label fx:id="playersNicknameLabel" alignment="CENTER" layoutX="100.0" layoutY="90.0" prefHeight="22.0" prefWidth="188.0" text="Label" AnchorPane.leftAnchor="100.0">
+      <Label fx:id="playersUsernameLabel" alignment="CENTER" layoutX="100.0" layoutY="90.0" prefHeight="22.0" prefWidth="188.0" text="Label" AnchorPane.leftAnchor="100.0">
          <font>
             <Font name="Arial" size="18.0" />
          </font>
       </Label>
-      <Label fx:id="opponentsNicknameLabel" alignment="CENTER" layoutX="323.0" layoutY="87.0" prefHeight="27.0" prefWidth="188.0" text="Label" AnchorPane.rightAnchor="89.0">
+      <Label fx:id="opponentsUsernameLabel" alignment="CENTER" layoutX="323.0" layoutY="87.0" prefHeight="27.0" prefWidth="188.0" text="Label" AnchorPane.rightAnchor="89.0">
          <font>
             <Font name="Arial" size="18.0" />
          </font>

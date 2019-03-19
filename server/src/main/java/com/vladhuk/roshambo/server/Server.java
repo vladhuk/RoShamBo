@@ -1,5 +1,8 @@
 package com.vladhuk.roshambo.server;
 
+import com.vladhuk.roshambo.server.models.Account;
+import com.vladhuk.roshambo.server.util.ServerSessionFactory;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -11,16 +14,15 @@ public class Server {
 
     private static final int PORT = 5543;
 
-    private static Map<Integer, Account> accounts = Collections.synchronizedMap(new HashMap<>());
-    private static Map<Integer, ClientHandler> onlineAccounts = Collections.synchronizedMap(new HashMap<>());
+    private static String databaseURL;
+    private static String databaseUsername;
+    private static String databasePassword;
+
+    private static Map<Account, ClientHandler> onlineAccounts = Collections.synchronizedMap(new HashMap<>());
     private static Map<Integer, Room> rooms = Collections.synchronizedMap(new HashMap<>());
     private static Set<Room> availableRooms = Collections.synchronizedSet(new HashSet<>());
 
-    public static Map<Integer, Account> getAccounts() {
-        return accounts;
-    }
-
-    public static Map<Integer, ClientHandler> getOnlineAccounts() {
+    public static Map<Account, ClientHandler> getOnlineAccounts() {
         return onlineAccounts;
     }
 
@@ -33,6 +35,30 @@ public class Server {
     }
 
     public static void main(String[] args) {
+        try {
+            readDatabasePropertiesFromUser();
+            ServerSessionFactory.configure(databaseURL, databaseUsername, databasePassword);
+            startServer();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void readDatabasePropertiesFromUser() throws IOException {
+        try(BufferedReader in = new BufferedReader(new InputStreamReader(System.in))) {
+            System.out.println("Enter MySQL url (example: \"jdbc:mysql://localhost:3306/java_test?" +
+                                       "useSSL=false&serverTimezone=Europe/Kiev\"):");
+            databaseURL = in.readLine();
+
+            System.out.println("Enter MySQL username:");
+            databaseUsername = in.readLine();
+
+            System.out.println("Enter MySQL password:");
+            databasePassword = in.readLine();
+        }
+    }
+
+    private static void startServer() throws IOException {
         ExecutorService executorService = Executors.newCachedThreadPool();
 
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
@@ -43,8 +69,6 @@ public class Server {
                 executorService.execute(new ClientHandler(clientSocket));
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
         } finally {
             executorService.shutdown();
             System.out.println("Server shutdown...");

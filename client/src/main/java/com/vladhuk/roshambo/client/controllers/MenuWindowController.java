@@ -2,6 +2,7 @@ package com.vladhuk.roshambo.client.controllers;
 
 import com.vladhuk.roshambo.client.Client;
 import com.vladhuk.roshambo.client.Connection;
+import com.vladhuk.roshambo.server.ServerCommand;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -35,8 +36,8 @@ public class MenuWindowController extends AbstractWindowController implements In
             onlineButton.setDisable(false);
         }
 
-        String nickname = Client.getAccount().getNickname();
-        helloLabel.setText("Hello, " + nickname + "!");
+        String username = Client.getAccount().getUsername();
+        helloLabel.setText("Hello, " + username + "!");
     }
 
     @FXML
@@ -63,6 +64,9 @@ public class MenuWindowController extends AbstractWindowController implements In
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == toLoginButton) {
+            if (Connection.isConnected()) {
+                Connection.sendObject(ServerCommand.EXIT);
+            }
             changeWindow(Client.LOGIN_WINDOW);
         } else if (result.get() == toDesktopButton) {
             Stage currentStage = getCurrentStage();
