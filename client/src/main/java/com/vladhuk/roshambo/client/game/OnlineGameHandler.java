@@ -15,6 +15,7 @@ public class OnlineGameHandler implements Runnable {
 
     private OnlineGameWindowController controller;
     private AbstractGameWindowController.Player opponent;
+    private Connection connection = Connection.getConnection();
 
     public OnlineGameHandler(OnlineGameWindowController controller) {
         this.controller = controller;
@@ -24,7 +25,7 @@ public class OnlineGameHandler implements Runnable {
     public void run() {
         try {
             while (!Thread.interrupted()) {
-                ServerCommand command = (ServerCommand) Connection.receiveObject();
+                ServerCommand command = (ServerCommand) connection.receiveObject();
 
                 switch (command) {
                     case NEW_OPPONENT:
@@ -49,14 +50,14 @@ public class OnlineGameHandler implements Runnable {
     }
 
     private void setOpponent() throws DisconnectException {
-        Account account = (Account) Connection.receiveObject();
+        Account account = (Account) connection.receiveObject();
         Platform.runLater(() -> controller.setOpponent(account));
         opponent = controller.getOpponent();
         controller.setTurnable(true);
     }
 
     private void setItem() throws DisconnectException {
-        String stringItem = (String) Connection.receiveObject();
+        String stringItem = (String) connection.receiveObject();
         RoShamBo item = RoShamBo.valueOf(stringItem);
 
         Platform.runLater(() -> {
@@ -67,7 +68,7 @@ public class OnlineGameHandler implements Runnable {
     }
 
     private void deleteOpponent() throws DisconnectException {
-        Connection.sendObject(ServerCommand.NEW_OPPONENT);
+        connection.sendObject(ServerCommand.NEW_OPPONENT);
 
         Platform.runLater(() -> {
             controller.setOpponent(AbstractGameWindowController.NULL_ACCOUNT);

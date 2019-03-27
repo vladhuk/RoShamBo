@@ -40,6 +40,8 @@ public class RegisterWindowController extends AbstractAuthorizationWindowControl
     @FXML
     private Label informationLabel;
 
+    private Connection connection = Connection.getConnection();
+
     @Override
     protected Stage getCurrentStage() {
         return (Stage) anchorPane.getScene().getWindow();
@@ -47,7 +49,7 @@ public class RegisterWindowController extends AbstractAuthorizationWindowControl
 
     @FXML
     void reconnect() {
-        if (Connection.reconnect()) {
+        if (connection.reconnect()) {
             reconnectButton.setVisible(false);
             informationLabel.setText("");
         }
@@ -58,7 +60,7 @@ public class RegisterWindowController extends AbstractAuthorizationWindowControl
 
     @FXML
     void accept() throws IOException {
-        if (!Connection.isConnected()) {
+        if (!connection.isConnected()) {
             return;
         }
 
@@ -105,9 +107,9 @@ public class RegisterWindowController extends AbstractAuthorizationWindowControl
     }
 
     private boolean sendAccountToServer(Account account) throws DisconnectException {
-        Connection.sendObject(ServerCommand.CREATE_ACCOUNT);
-        Connection.sendObject(account);
-        return Connection.receiveAnswer();
+        connection.sendObject(ServerCommand.CREATE_ACCOUNT);
+        connection.sendObject(account);
+        return connection.receiveAnswer();
     }
 
     @FXML

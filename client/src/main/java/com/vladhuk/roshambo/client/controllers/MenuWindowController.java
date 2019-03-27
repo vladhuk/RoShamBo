@@ -25,6 +25,8 @@ public class MenuWindowController extends AbstractWindowController implements In
     @FXML
     private Button onlineButton;
 
+    private Connection connection = Connection.getConnection();
+
     @Override
     public Stage getCurrentStage() {
         return (Stage) anchorPane.getScene().getWindow();
@@ -32,7 +34,7 @@ public class MenuWindowController extends AbstractWindowController implements In
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        if (Connection.isConnected()) {
+        if (connection.isConnected()) {
             onlineButton.setDisable(false);
         }
 
@@ -64,8 +66,8 @@ public class MenuWindowController extends AbstractWindowController implements In
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == toLoginButton) {
-            if (Connection.isConnected()) {
-                Connection.sendObject(ServerCommand.EXIT);
+            if (connection.isConnected()) {
+                connection.sendObject(ServerCommand.EXIT);
             }
             changeWindow(Client.LOGIN_WINDOW);
         } else if (result.get() == toDesktopButton) {

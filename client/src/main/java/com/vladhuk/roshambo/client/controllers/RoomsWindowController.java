@@ -35,6 +35,8 @@ public class RoomsWindowController extends AbstractWindowController implements I
     @FXML
     private TableColumn<Room, String> descriptionColumn;
 
+    private Connection connection = Connection.getConnection();
+
     @Override
     protected Stage getCurrentStage() {
         return (Stage) anchorPane.getScene().getWindow();
@@ -88,10 +90,10 @@ public class RoomsWindowController extends AbstractWindowController implements I
         boolean answer = false;
 
         try {
-            Connection.sendObject(ServerCommand.ENTER_ROOM);
-            Connection.sendObject(room);
+            connection.sendObject(ServerCommand.ENTER_ROOM);
+            connection.sendObject(room);
 
-            answer = Connection.receiveAnswer();
+            answer = connection.receiveAnswer();
         } catch (DisconnectException e) {
             showDisconnectAlert();
             changeWindow(Client.MENU_WINDOW);
@@ -112,14 +114,14 @@ public class RoomsWindowController extends AbstractWindowController implements I
     }
 
     private int getUsersNumber() throws DisconnectException {
-        Connection.sendObject(ServerCommand.USERS_NUMBER);
-        return Connection.receiveInteger();
+        connection.sendObject(ServerCommand.USERS_NUMBER);
+        return connection.receiveInteger();
     }
 
     private void loadRoomsList() throws DisconnectException {
-        Connection.sendObject(ServerCommand.ROOMS_LIST);
+        connection.sendObject(ServerCommand.ROOMS_LIST);
 
-        List list = (List) Connection.receiveObject();
+        List list = (List) connection.receiveObject();
         ObservableList rooms = FXCollections.observableList(list);
 
         tableView.setItems(rooms);

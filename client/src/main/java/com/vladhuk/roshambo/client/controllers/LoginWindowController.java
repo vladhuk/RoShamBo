@@ -49,6 +49,8 @@ public class LoginWindowController extends AbstractAuthorizationWindowController
     @FXML
     private CheckBox rememberBox;
 
+    private Connection connection = Connection.getConnection();
+
     @Override
     protected Stage getCurrentStage() {
         return (Stage) anchorPane.getScene().getWindow();
@@ -56,7 +58,7 @@ public class LoginWindowController extends AbstractAuthorizationWindowController
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        if (!Connection.isConnected()) {
+        if (!connection.isConnected()) {
             setWindowOnlineStatus(false);
             informationLabel.setText("Couldn't connect to server");
         }
@@ -76,7 +78,7 @@ public class LoginWindowController extends AbstractAuthorizationWindowController
 
     @FXML
     void reconnect() {
-        if (Connection.reconnect()) {
+        if (connection.reconnect()) {
             setWindowOnlineStatus(true);
             informationLabel.setText("");
         }
@@ -118,7 +120,7 @@ public class LoginWindowController extends AbstractAuthorizationWindowController
 
         Account account = new Account(usernameField.getText(), passwordField.getText());
 
-        if (Connection.isConnected()) {
+        if (connection.isConnected()) {
             try {
                 if (!isAccountExist(account)) {
                     informationLabel.setText("Invalid username or password");
@@ -149,7 +151,7 @@ public class LoginWindowController extends AbstractAuthorizationWindowController
             result = false;
         }
 
-        if (Connection.isConnected() && !isFieldCorrectly(passwordField, passwordLabel)) {
+        if (connection.isConnected() && !isFieldCorrectly(passwordField, passwordLabel)) {
             result = false;
         }
 
@@ -157,10 +159,10 @@ public class LoginWindowController extends AbstractAuthorizationWindowController
     }
 
     private boolean isAccountExist(Account account) throws DisconnectException {
-        Connection.sendObject(ServerCommand.LOGIN);
-        Connection.sendObject(account);
+        connection.sendObject(ServerCommand.LOGIN);
+        connection.sendObject(account);
 
-        boolean answer = Connection.receiveAnswer();
+        boolean answer = connection.receiveAnswer();
 
         return answer;
     }

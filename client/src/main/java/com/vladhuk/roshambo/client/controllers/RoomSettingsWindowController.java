@@ -22,6 +22,8 @@ public class RoomSettingsWindowController extends AbstractWindowController {
     @FXML
     private TextField descriptionField;
 
+    private Connection connection = Connection.getConnection();
+
     @Override
     protected Stage getCurrentStage() {
         return (Stage) anchorPane.getScene().getWindow();
@@ -41,8 +43,8 @@ public class RoomSettingsWindowController extends AbstractWindowController {
     }
 
     private void sendRoom(Room room) throws DisconnectException {
-        Connection.sendObject(ServerCommand.ADD_ROOM);
-        Connection.sendObject(room);
+        connection.sendObject(ServerCommand.ADD_ROOM);
+        connection.sendObject(room);
     }
 
     @FXML

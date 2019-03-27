@@ -39,7 +39,7 @@ public class Client extends Application {
         createConfigDirectory();
 
         String ip = Connection.loadIpFromFile();
-        Connection.connect(ip);
+        Connection.buildConnection(ip);
 
         stage.getIcons().add(new Image("images/RPS.png"));
 

@@ -16,6 +16,7 @@ public class OnlineGameWindowController extends AbstractGameWindowController imp
     private Thread gameHandler = new Thread(new OnlineGameHandler(this));
     private Thread waitForOpponentThread;
     private volatile boolean isTurnable = false;
+    private Connection connection = Connection.getConnection();
 
     @Override
     public void init() {
@@ -51,8 +52,8 @@ public class OnlineGameWindowController extends AbstractGameWindowController imp
         setInfo("Waiting for opponent...");
 
         try {
-            Connection.sendObject(ServerCommand.ITEM);
-            Connection.sendObject(playersItem.name());
+            connection.sendObject(ServerCommand.ITEM);
+            connection.sendObject(playersItem.name());
 
             waitForOpponent();
         } catch (DisconnectException e) {
@@ -111,7 +112,7 @@ public class OnlineGameWindowController extends AbstractGameWindowController imp
 
     private void leaveRoom() {
         try {
-            Connection.sendObject(ServerCommand.LEAVE_ROOM);
+            connection.sendObject(ServerCommand.LEAVE_ROOM);
             gameHandler.interrupt();
         } catch (DisconnectException e) {
             disconnect();

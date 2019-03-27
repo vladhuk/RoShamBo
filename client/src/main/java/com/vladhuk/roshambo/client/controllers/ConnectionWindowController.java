@@ -22,10 +22,12 @@ public class ConnectionWindowController implements Initializable {
     @FXML
     private Label informationLabel;
 
+    private Connection connection = Connection.getConnection();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            currentIpLabel.setText("Current ip: " + Connection.getIP());
+            currentIpLabel.setText("Current ip: " + connection.getIP());
             ipTextField.setText(Connection.loadIpFromFile());
         } catch (IOException e) {
             e.printStackTrace();
@@ -54,14 +56,15 @@ public class ConnectionWindowController implements Initializable {
             return;
         }
 
-        if (Connection.connect(ip)) {
+        connection = Connection.buildConnection(ip);
+
+        if (connection.isConnected()) {
             informationLabel.setTextFill(Color.GREEN);
             currentIpLabel.setText("Current ip: " + ip);
             informationLabel.setText("Successfully connected");
-        }
-        else {
+        } else {
             informationLabel.setTextFill(Color.RED);
-            informationLabel.setText("Could not connect to server");
+            informationLabel.setText("Couldn't connect to server");
         }
     }
 

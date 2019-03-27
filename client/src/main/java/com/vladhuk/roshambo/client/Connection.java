@@ -6,23 +6,17 @@ import com.vladhuk.roshambo.server.DisconnectException;
 import java.io.*;
 import java.net.Socket;
 
+
 public class Connection {
 
     private static final File IP_FILE = new File(Client.DOC_PATH + "ip.dat");
     private static final int PORT = 5543;
 
-    private static Commander commander;
-    private static String ip = "";
-    private static boolean isConnected = false;
+    private Commander commander;
+    private String ip;
+    private boolean isConnected;
 
-
-    public static String getIP() {
-        return ip;
-    }
-
-    private static void setIP(String ip) {
-        Connection.ip = ip;
-    }
+    private Connection() {}
 
     public static void saveIpToFile(String ip) {
         try (PrintWriter writer = new PrintWriter(IP_FILE)) {
@@ -47,50 +41,70 @@ public class Connection {
         return ip;
     }
 
-    public static boolean isConnected() {
-        return isConnected;
+    private static class ConnectionFactory {
+        private static Connection connection = new Connection();
     }
 
-    private static void setConnection(boolean isConnected) {
-        Connection.isConnected = isConnected;
+    public static Connection getConnection() {
+        return ConnectionFactory.connection;
     }
 
-    public static boolean connect(String ip) {
-        boolean result = true;
+    public static Connection buildConnection(String ip) {
+        Connection connection = getConnection();
+        connection.disconnect();
+        connection.setIP(ip);
 
         try {
             Socket socket = new Socket(ip, PORT);
-            commander = new Commander(socket);
-            setIP(ip);
-            setConnection(true);
+            Commander commander = new Commander(socket);
+            connection.setCommander(commander);
+            connection.setConnected(true);
         } catch (IOException e) {
-            setConnection(false);
-            result = false;
+            connection.setConnected(false);
         }
 
-        return result;
+        return connection;
     }
 
-    public static boolean reconnect() {
-        if (isConnected()) {
-            return true;
+    public String getIP() {
+        return ip;
+    }
+
+    private void setIP(String ip) {
+        this.ip = ip;
+    }
+
+    public boolean isConnected() {
+        return isConnected;
+    }
+
+    private void setConnected(boolean isConnected) {
+        this.isConnected = isConnected;
+    }
+
+    private void setCommander(Commander commander) {
+        this.commander = commander;
+    }
+
+    private Commander getCommander() {
+        return commander;
+    }
+
+    public boolean reconnect() {
+        buildConnection(getIP());
+
+        return isConnected();
+    }
+
+    private void disconnect() {
+        if (commander != null) {
+            commander.closeSocket();
         }
 
-        if (!connect(getIP())) {
-            setConnection(false);
-            return false;
-        }
-
-        setConnection(true);
-        return true;
+        setConnected(false);
     }
 
-    private static void disconnect() {
-        commander.closeSocket();
-        setConnection(false);
-    }
-
-    public static void sendObject(Object object) throws DisconnectException {
+    public void sendObject(Object object) throws DisconnectException {
         try {
             commander.sendObject(object);
         } catch (DisconnectException e) {
@@ -99,7 +113,7 @@ public class Connection {
         }
     }
 
-    public static Object receiveObject() throws DisconnectException {
+    public Object receiveObject() throws DisconnectException {
         Object object;
 
         try {
@@ -112,7 +126,7 @@ public class Connection {
         return object;
     }
 
-    public static void sendInteger(int i) throws DisconnectException {
+    public void sendInteger(int i) throws DisconnectException {
         try {
             commander.sendInteger(i);
         } catch (DisconnectException e) {
@@ -121,7 +135,7 @@ public class Connection {
         }
     }
 
-    public static int receiveInteger() throws DisconnectException {
+    public int receiveInteger() throws DisconnectException {
         int i;
 
         try {
@@ -134,7 +148,7 @@ public class Connection {
         return i;
     }
 
-    public static boolean receiveAnswer() throws DisconnectException {
+    public boolean receiveAnswer() throws DisconnectException {
         boolean answer;
 
         try {

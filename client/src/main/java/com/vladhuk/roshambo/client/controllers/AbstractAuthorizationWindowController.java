@@ -7,6 +7,7 @@ import javafx.scene.control.TextField;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 public abstract class AbstractAuthorizationWindowController extends AbstractWindowController {
 
     protected static final String ERROR_STYLE = "error";
