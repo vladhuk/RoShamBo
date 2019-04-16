@@ -5,8 +5,8 @@ import com.vladhuk.roshambo.client.util.Connection;
 import com.vladhuk.roshambo.client.handler.OnlineGameHandler;
 import com.vladhuk.roshambo.client.game.RoShamBo;
 import com.vladhuk.roshambo.client.util.WindowManager;
-import com.vladhuk.roshambo.server.DisconnectException;
-import com.vladhuk.roshambo.server.ServerCommand;
+import com.vladhuk.roshambo.server.util.DisconnectException;
+import com.vladhuk.roshambo.server.util.ServerCommand;
 import javafx.application.Platform;
 import javafx.fxml.Initializable;
 

@@ -1,19 +1,18 @@
 package com.vladhuk.roshambo.client.util;
 
 import com.vladhuk.roshambo.client.Client;
-import com.vladhuk.roshambo.server.Commander;
-import com.vladhuk.roshambo.server.DisconnectException;
+import com.vladhuk.roshambo.server.util.*;
 
 import java.io.*;
 import java.net.Socket;
 
 
-public class Connection {
+public class Connection implements Connector {
 
     private static final File IP_FILE = new File(Client.DOC_PATH + "ip.dat");
     private static final int PORT = 5543;
 
-    private Commander commander;
+    private ServerConnector connector;
     private String ip;
     private boolean isConnected;
 
@@ -57,8 +56,8 @@ public class Connection {
 
         try {
             Socket socket = new Socket(ip, PORT);
-            Commander commander = new Commander(socket);
-            connection.setCommander(commander);
+            ServerConnector connector = new ServerConnector(socket);
+            connection.setConnector(connector);
             connection.setConnected(true);
         } catch (IOException e) {
             connection.setConnected(false);
@@ -83,12 +82,12 @@ public class Connection {
         this.isConnected = isConnected;
     }
 
-    private void setCommander(Commander commander) {
-        this.commander = commander;
+    private void setConnector(ServerConnector connector) {
+        this.connector = connector;
     }
 
-    private Commander getCommander() {
-        return commander;
+    private Connector getConnector() {
+        return connector;
     }
 
     public boolean reconnect() {
@@ -98,27 +97,29 @@ public class Connection {
     }
 
     private void disconnect() {
-        if (commander != null) {
-            commander.closeSocket();
+        if (connector != null) {
+            connector.closeSocket();
         }
 
         setConnected(false);
     }
 
+    @Override
     public void sendObject(Object object) throws DisconnectException {
         try {
-            commander.sendObject(object);
+            connector.sendObject(object);
         } catch (DisconnectException e) {
             disconnect();
             throw e;
         }
     }
 
+    @Override
     public Object receiveObject() throws DisconnectException {
         Object object;
 
         try {
-            object = commander.receiveObject();
+            object = connector.receiveObject();
         } catch (DisconnectException e) {
             disconnect();
             throw e;
@@ -127,20 +128,22 @@ public class Connection {
         return object;
     }
 
+    @Override
     public void sendInteger(int i) throws DisconnectException {
         try {
-            commander.sendInteger(i);
+            connector.sendInteger(i);
         } catch (DisconnectException e) {
             disconnect();
             throw e;
         }
     }
 
+    @Override
     public int receiveInteger() throws DisconnectException {
         int i;
 
         try {
-            i = commander.receiveInteger();
+            i = connector.receiveInteger();
         } catch (DisconnectException e) {
             disconnect();
             throw e;
@@ -149,11 +152,22 @@ public class Connection {
         return i;
     }
 
+    @Override
+    public void sendAnswer(boolean answer) throws DisconnectException {
+        try {
+            connector.sendAnswer(answer);
+        } catch (DisconnectException e) {
+            disconnect();
+            throw e;
+        }
+    }
+
+    @Override
     public boolean receiveAnswer() throws DisconnectException {
         boolean answer;
 
         try {
-            answer = commander.receiveAnswer();
+            answer = connector.receiveAnswer();
         } catch (DisconnectException e) {
             disconnect();
             throw e;

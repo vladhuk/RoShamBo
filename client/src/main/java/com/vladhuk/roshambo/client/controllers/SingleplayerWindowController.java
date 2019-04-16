@@ -2,7 +2,7 @@ package com.vladhuk.roshambo.client.controllers;
 
 import com.vladhuk.roshambo.client.Client;
 import com.vladhuk.roshambo.client.game.RoShamBo;
-import com.vladhuk.roshambo.server.models.Account;
+import com.vladhuk.roshambo.server.model.Account;
 
 import java.io.IOException;
 

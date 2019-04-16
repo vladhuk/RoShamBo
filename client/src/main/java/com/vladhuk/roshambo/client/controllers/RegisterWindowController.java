@@ -3,19 +3,16 @@ package com.vladhuk.roshambo.client.controllers;
 import com.vladhuk.roshambo.client.Client;
 import com.vladhuk.roshambo.client.util.Connection;
 import com.vladhuk.roshambo.client.util.WindowManager;
-import com.vladhuk.roshambo.server.models.Account;
-import com.vladhuk.roshambo.server.DisconnectException;
-import com.vladhuk.roshambo.server.ServerCommand;
+import com.vladhuk.roshambo.server.model.Account;
+import com.vladhuk.roshambo.server.util.DisconnectException;
+import com.vladhuk.roshambo.server.util.ServerCommand;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 
 public class RegisterWindowController extends AbstractAuthorizationWindowController {

@@ -3,7 +3,7 @@ package com.vladhuk.roshambo.client.controllers;
 import com.vladhuk.roshambo.client.Client;
 import com.vladhuk.roshambo.client.game.RoShamBo;
 import com.vladhuk.roshambo.client.util.WindowManager;
-import com.vladhuk.roshambo.server.models.Account;
+import com.vladhuk.roshambo.server.model.Account;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;

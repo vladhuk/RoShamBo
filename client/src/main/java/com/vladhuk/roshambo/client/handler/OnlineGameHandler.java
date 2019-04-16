@@ -1,13 +1,11 @@
 package com.vladhuk.roshambo.client.handler;
 
 import com.vladhuk.roshambo.client.Client;
-import com.vladhuk.roshambo.client.util.Connection;
-import com.vladhuk.roshambo.client.controllers.AbstractGameWindowController;
-import com.vladhuk.roshambo.client.controllers.OnlineGameWindowController;
+import com.vladhuk.roshambo.client.util.*;
+import com.vladhuk.roshambo.client.controllers.*;
 import com.vladhuk.roshambo.client.game.RoShamBo;
-import com.vladhuk.roshambo.client.util.WindowManager;
-import com.vladhuk.roshambo.server.*;
-import com.vladhuk.roshambo.server.models.Account;
+import com.vladhuk.roshambo.server.model.Account;
+import com.vladhuk.roshambo.server.util.*;
 import javafx.application.Platform;
 
 import java.io.IOException;

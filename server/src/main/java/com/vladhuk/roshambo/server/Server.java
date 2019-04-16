@@ -1,6 +1,8 @@
 package com.vladhuk.roshambo.server;
 
-import com.vladhuk.roshambo.server.models.Account;
+import com.vladhuk.roshambo.server.handler.ClientHandler;
+import com.vladhuk.roshambo.server.model.Account;
+import com.vladhuk.roshambo.server.model.Room;
 import com.vladhuk.roshambo.server.util.ServerSessionFactory;
 
 import java.io.*;

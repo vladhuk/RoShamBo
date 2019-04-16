@@ -1,31 +1,31 @@
-package com.vladhuk.roshambo.server.services;
+package com.vladhuk.roshambo.server.service;
 
-import com.vladhuk.roshambo.server.dao.AccountDAO;
-import com.vladhuk.roshambo.server.models.Account;
+import com.vladhuk.roshambo.server.dao.AccountDao;
+import com.vladhuk.roshambo.server.model.Account;
 
 
 public class AccountService {
 
-    private AccountDAO accountDAO = new AccountDAO();
+    private AccountDao accountDao = new AccountDao();
 
     public void save(Account account) {
-        accountDAO.save(account);
+        accountDao.save(account);
     }
 
     public void update(Account account) {
-        accountDAO.update(account);
+        accountDao.update(account);
     }
 
     public void delete(Account account) {
-        accountDAO.delete(account);
+        accountDao.delete(account);
     }
 
     public Account find(int id) {
-        return accountDAO.findById(id);
+        return accountDao.findById(id);
     }
 
     public Account find(String username, String password) {
-        return accountDAO.findByUsernameAndPassword(username, password);
+        return accountDao.findByUsernameAndPassword(username, password);
     }
 
     public Account find(Account account) {
@@ -33,7 +33,7 @@ public class AccountService {
     }
 
     public boolean isUsernameExist(String nickname) {
-        return accountDAO.findUsername(nickname) != null;
+        return accountDao.findUsername(nickname) != null;
     }
 
     public boolean isUsernameExist(Account account) {

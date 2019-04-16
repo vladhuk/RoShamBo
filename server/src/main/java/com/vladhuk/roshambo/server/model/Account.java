@@ -1,4 +1,4 @@
-package com.vladhuk.roshambo.server.models;
+package com.vladhuk.roshambo.server.model;
 
 import javax.persistence.*;
 import java.io.Serializable;

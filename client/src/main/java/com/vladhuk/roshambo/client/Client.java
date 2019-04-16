@@ -3,7 +3,7 @@ package com.vladhuk.roshambo.client;
 import com.vladhuk.roshambo.client.util.Connection;
 import com.vladhuk.roshambo.client.util.Window;
 import com.vladhuk.roshambo.client.util.WindowManager;
-import com.vladhuk.roshambo.server.models.Account;
+import com.vladhuk.roshambo.server.model.Account;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;

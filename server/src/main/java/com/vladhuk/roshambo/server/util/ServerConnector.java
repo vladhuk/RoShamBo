@@ -1,16 +1,17 @@
-package com.vladhuk.roshambo.server;
+package com.vladhuk.roshambo.server.util;
 
 import java.io.*;
 import java.net.Socket;
 
-public class Commander {
+public class ServerConnector implements Connector {
 
     private Socket socket;
 
-    public Commander(Socket socket) {
+    public ServerConnector(Socket socket) {
         this.socket = socket;
     }
 
+    @Override
     public void sendObject(Object object) throws DisconnectException {
         try {
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
@@ -21,6 +22,7 @@ public class Commander {
         }
     }
 
+    @Override
     public Object receiveObject() throws DisconnectException {
         Object object = null;
 
@@ -36,6 +38,7 @@ public class Commander {
         return object;
     }
 
+    @Override
     public void sendInteger(int i) throws DisconnectException {
         try {
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
@@ -46,6 +49,7 @@ public class Commander {
         }
     }
 
+    @Override
     public int receiveInteger() throws DisconnectException {
         try {
             DataInputStream i = new DataInputStream(socket.getInputStream());
@@ -56,6 +60,7 @@ public class Commander {
         }
     }
 
+    @Override
     public void sendAnswer(boolean answer) throws DisconnectException {
         try {
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
@@ -66,6 +71,7 @@ public class Commander {
         }
     }
 
+    @Override
     public boolean receiveAnswer() throws DisconnectException {
         try {
             DataInputStream in = new DataInputStream(socket.getInputStream());

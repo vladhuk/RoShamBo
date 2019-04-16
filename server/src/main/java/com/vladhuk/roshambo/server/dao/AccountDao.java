@@ -1,6 +1,6 @@
 package com.vladhuk.roshambo.server.dao;
 
-import com.vladhuk.roshambo.server.models.Account;
+import com.vladhuk.roshambo.server.model.Account;
 import com.vladhuk.roshambo.server.util.ServerSessionFactory;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -9,7 +9,7 @@ import org.hibernate.query.Query;
 import javax.persistence.criteria.*;
 
 
-public class AccountDAO implements GenericDAO<Account> {
+public class AccountDao implements GenericDao<Account> {
 
     private Session session;
     private Transaction transaction;

@@ -10,6 +10,6 @@
 
         <property name="hibernate.hbm2ddl.auto">update</property>
 
-        <mapping class="com.vladhuk.roshambo.server.models.Account"/>
+        <mapping class="com.vladhuk.roshambo.server.model.Account"/>
     </session-factory>
 </hibernate-configuration>
