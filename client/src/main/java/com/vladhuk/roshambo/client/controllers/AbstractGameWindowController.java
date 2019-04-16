@@ -1,7 +1,8 @@
 package com.vladhuk.roshambo.client.controllers;
 
 import com.vladhuk.roshambo.client.Client;
-import com.vladhuk.roshambo.client.game.logics.RoShamBo;
+import com.vladhuk.roshambo.client.game.RoShamBo;
+import com.vladhuk.roshambo.client.util.WindowManager;
 import com.vladhuk.roshambo.server.models.Account;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,7 +17,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public abstract class AbstractGameWindowController extends AbstractWindowController implements Initializable {
+public abstract class AbstractGameWindowController implements Initializable, WindowController {
 
     public static final Account NULL_ACCOUNT = new Account("[empty]");
 
@@ -46,11 +47,7 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
 
     private Player player;
     private Player opponent;
-
-    @Override
-    protected Stage getCurrentStage() {
-        return (Stage) anchorPane.getScene().getWindow();
-    }
+    private WindowManager windowManager = new WindowManager(() -> (Stage) anchorPane.getScene().getWindow());
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -75,6 +72,14 @@ public abstract class AbstractGameWindowController extends AbstractWindowControl
 
         addWaitingImage(player.getImageView());
         addWaitingImage(opponent.getImageView());
+    }
+
+    public WindowManager getWindowManager() {
+        return windowManager;
+    }
+
+    public Stage getCurrentStage() {
+        return windowManager.getCurrentStage();
     }
 
     public class Player {

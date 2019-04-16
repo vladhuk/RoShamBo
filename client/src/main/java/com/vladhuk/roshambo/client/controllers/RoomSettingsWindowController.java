@@ -1,17 +1,21 @@
 package com.vladhuk.roshambo.client.controllers;
 
 import com.vladhuk.roshambo.client.Client;
-import com.vladhuk.roshambo.client.Connection;
+import com.vladhuk.roshambo.client.util.Connection;
+import com.vladhuk.roshambo.client.util.WindowManager;
 import com.vladhuk.roshambo.server.*;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 
-public class RoomSettingsWindowController extends AbstractWindowController {
+public class RoomSettingsWindowController implements WindowController {
 
     @FXML
     AnchorPane anchorPane;
@@ -23,11 +27,7 @@ public class RoomSettingsWindowController extends AbstractWindowController {
     private TextField descriptionField;
 
     private Connection connection = Connection.getConnection();
-
-    @Override
-    protected Stage getCurrentStage() {
-        return (Stage) anchorPane.getScene().getWindow();
-    }
+    private WindowManager windowManager = new WindowManager(() -> (Stage) anchorPane.getScene().getWindow());
 
     @FXML
     void createRoom() throws IOException {
@@ -35,10 +35,10 @@ public class RoomSettingsWindowController extends AbstractWindowController {
             Room room = new Room(titleField.getText(), descriptionField.getText());
             room.addPlayer(Client.getAccount());
             sendRoom(room);
-            changeWindow(Client.GAME_WINDOW, new OnlineGameWindowController());
+            windowManager.changeWindow(Client.GAME_WINDOW, new OnlineGameWindowController());
         } catch (DisconnectException e) {
-            showDisconnectAlert();
-            changeWindow(Client.MENU_WINDOW);
+            WindowManager.showDisconnectAlert();
+            windowManager.changeWindow(Client.MENU_WINDOW);
         }
     }
 
@@ -49,7 +49,7 @@ public class RoomSettingsWindowController extends AbstractWindowController {
 
     @FXML
     void cancel() throws IOException {
-        changeWindow(Client.ROOMS_WINDOW);
+        windowManager.changeWindow(Client.ROOMS_WINDOW);
     }
 
 }

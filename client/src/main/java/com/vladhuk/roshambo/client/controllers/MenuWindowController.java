@@ -1,7 +1,8 @@
 package com.vladhuk.roshambo.client.controllers;
 
 import com.vladhuk.roshambo.client.Client;
-import com.vladhuk.roshambo.client.Connection;
+import com.vladhuk.roshambo.client.util.Connection;
+import com.vladhuk.roshambo.client.util.WindowManager;
 import com.vladhuk.roshambo.server.ServerCommand;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,7 +15,7 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class MenuWindowController extends AbstractWindowController implements Initializable {
+public class MenuWindowController implements Initializable, WindowController {
 
     @FXML
     private AnchorPane anchorPane;
@@ -27,10 +28,7 @@ public class MenuWindowController extends AbstractWindowController implements In
 
     private Connection connection = Connection.getConnection();
 
-    @Override
-    public Stage getCurrentStage() {
-        return (Stage) anchorPane.getScene().getWindow();
-    }
+    private WindowManager windowManager = new WindowManager(() -> (Stage) anchorPane.getScene().getWindow());
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -44,12 +42,12 @@ public class MenuWindowController extends AbstractWindowController implements In
 
     @FXML
     void openSingleplayer() throws IOException {
-        changeWindow(Client.GAME_WINDOW, new SingleplayerWindowController());
+        windowManager.changeWindow(Client.GAME_WINDOW, new SingleplayerWindowController());
     }
 
     @FXML
     void openOnline() throws IOException {
-        changeWindow(Client.ROOMS_WINDOW);
+        windowManager.changeWindow(Client.ROOMS_WINDOW);
     }
 
     @FXML
@@ -69,10 +67,9 @@ public class MenuWindowController extends AbstractWindowController implements In
             if (connection.isConnected()) {
                 connection.sendObject(ServerCommand.EXIT);
             }
-            changeWindow(Client.LOGIN_WINDOW);
+            windowManager.changeWindow(Client.LOGIN_WINDOW);
         } else if (result.get() == toDesktopButton) {
-            Stage currentStage = getCurrentStage();
-            currentStage.close();
+            windowManager.getCurrentStage().close();
         }
     }
 

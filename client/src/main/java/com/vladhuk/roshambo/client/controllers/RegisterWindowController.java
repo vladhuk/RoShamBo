@@ -1,17 +1,21 @@
 package com.vladhuk.roshambo.client.controllers;
 
 import com.vladhuk.roshambo.client.Client;
-import com.vladhuk.roshambo.client.Connection;
+import com.vladhuk.roshambo.client.util.Connection;
+import com.vladhuk.roshambo.client.util.WindowManager;
 import com.vladhuk.roshambo.server.models.Account;
 import com.vladhuk.roshambo.server.DisconnectException;
 import com.vladhuk.roshambo.server.ServerCommand;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 
 public class RegisterWindowController extends AbstractAuthorizationWindowController {
@@ -41,11 +45,7 @@ public class RegisterWindowController extends AbstractAuthorizationWindowControl
     private Label informationLabel;
 
     private Connection connection = Connection.getConnection();
-
-    @Override
-    protected Stage getCurrentStage() {
-        return (Stage) anchorPane.getScene().getWindow();
-    }
+    private WindowManager windowManager = new WindowManager(() -> (Stage) anchorPane.getScene().getWindow());
 
     @FXML
     void reconnect() {
@@ -83,7 +83,7 @@ public class RegisterWindowController extends AbstractAuthorizationWindowControl
         }
 
         Client.setAccount(account);
-        changeWindow(Client.MENU_WINDOW);
+        windowManager.changeWindow(Client.MENU_WINDOW);
     }
 
     private boolean checkFields() {
@@ -114,7 +114,6 @@ public class RegisterWindowController extends AbstractAuthorizationWindowControl
 
     @FXML
     void cancel() throws IOException {
-        changeWindow(Client.LOGIN_WINDOW);
+        windowManager.changeWindow(Client.LOGIN_WINDOW);
     }
-
 }

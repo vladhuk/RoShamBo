@@ -1,10 +1,11 @@
-package com.vladhuk.roshambo.client.game;
+package com.vladhuk.roshambo.client.handler;
 
 import com.vladhuk.roshambo.client.Client;
-import com.vladhuk.roshambo.client.Connection;
+import com.vladhuk.roshambo.client.util.Connection;
 import com.vladhuk.roshambo.client.controllers.AbstractGameWindowController;
 import com.vladhuk.roshambo.client.controllers.OnlineGameWindowController;
-import com.vladhuk.roshambo.client.game.logics.RoShamBo;
+import com.vladhuk.roshambo.client.game.RoShamBo;
+import com.vladhuk.roshambo.client.util.WindowManager;
 import com.vladhuk.roshambo.server.*;
 import com.vladhuk.roshambo.server.models.Account;
 import javafx.application.Platform;
@@ -78,9 +79,9 @@ public class OnlineGameHandler implements Runnable {
 
     private void disconnect() {
         Platform.runLater(() -> {
-            controller.showDisconnectAlert();
+            WindowManager.showDisconnectAlert();
             try {
-                controller.changeWindow(Client.MENU_WINDOW);
+                controller.getWindowManager().changeWindow(Client.MENU_WINDOW);
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public abstract class AbstractAuthorizationWindowController extends AbstractWindowController {
+public abstract class AbstractAuthorizationWindowController implements WindowController {
 
     protected static final String ERROR_STYLE = "error";
 

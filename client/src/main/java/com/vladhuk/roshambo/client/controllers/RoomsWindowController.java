@@ -1,24 +1,29 @@
 package com.vladhuk.roshambo.client.controllers;
 
 import com.vladhuk.roshambo.client.Client;
-import com.vladhuk.roshambo.client.Connection;
-import com.vladhuk.roshambo.client.Window;
-import com.vladhuk.roshambo.server.*;
+import com.vladhuk.roshambo.client.util.Connection;
+import com.vladhuk.roshambo.client.util.WindowManager;
+import com.vladhuk.roshambo.server.DisconnectException;
+import com.vladhuk.roshambo.server.Room;
+import com.vladhuk.roshambo.server.ServerCommand;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.List;
+import java.util.ResourceBundle;
 
-public class RoomsWindowController extends AbstractWindowController implements Initializable {
+public class RoomsWindowController implements Initializable, WindowController {
 
     @FXML
     private AnchorPane anchorPane;
@@ -36,11 +41,7 @@ public class RoomsWindowController extends AbstractWindowController implements I
     private TableColumn<Room, String> descriptionColumn;
 
     private Connection connection = Connection.getConnection();
-
-    @Override
-    protected Stage getCurrentStage() {
-        return (Stage) anchorPane.getScene().getWindow();
-    }
+    private WindowManager windowManager = new WindowManager(() -> (Stage) anchorPane.getScene().getWindow());
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -60,26 +61,26 @@ public class RoomsWindowController extends AbstractWindowController implements I
     }
 
     private void addTableListener() {
-        tableView.setRowFactory( tv -> {
+        tableView.setRowFactory(tv -> {
             TableRow<Room> row = new TableRow<>();
 
             row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && (!row.isEmpty()) ) {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
                     enterRoom(row.getItem());
                 }
             });
 
-            return row ;
+            return row;
         });
     }
 
     private void enterRoom(Room room) {
         try {
             if (sendRoom(room)) {
-                changeWindow(Client.GAME_WINDOW, new OnlineGameWindowController());
-            }
-            else {
-                showAlert("The room is is no longer available", "Choose another room from the list");
+                windowManager.changeWindow(Client.GAME_WINDOW, new OnlineGameWindowController());
+            } else {
+                WindowManager.showAlert("The room is is no longer available",
+                                        "Choose another room from the list");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -95,8 +96,8 @@ public class RoomsWindowController extends AbstractWindowController implements I
 
             answer = connection.receiveAnswer();
         } catch (DisconnectException e) {
-            showDisconnectAlert();
-            changeWindow(Client.MENU_WINDOW);
+            WindowManager.showDisconnectAlert();
+            windowManager.changeWindow(Client.MENU_WINDOW);
         }
 
         return answer;
@@ -108,8 +109,8 @@ public class RoomsWindowController extends AbstractWindowController implements I
             usersLabel.setText(String.valueOf(getUsersNumber()));
             loadRoomsList();
         } catch (DisconnectException e) {
-            showDisconnectAlert();
-            changeWindow(Client.MENU_WINDOW);
+            WindowManager.showDisconnectAlert();
+            windowManager.changeWindow(Client.MENU_WINDOW);
         }
     }
 
@@ -129,12 +130,12 @@ public class RoomsWindowController extends AbstractWindowController implements I
 
     @FXML
     void addRoom() throws IOException {
-        changeWindow(Client.ROOM_SETTINGS_WINDOW);
+        windowManager.changeWindow(Client.ROOM_SETTINGS_WINDOW);
     }
 
     @FXML
     void back() throws IOException {
-        changeWindow(Client.MENU_WINDOW);
+        windowManager.changeWindow(Client.MENU_WINDOW);
     }
 
 }

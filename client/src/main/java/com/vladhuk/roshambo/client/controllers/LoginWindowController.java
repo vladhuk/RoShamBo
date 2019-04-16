@@ -1,10 +1,12 @@
 package com.vladhuk.roshambo.client.controllers;
 
 import com.vladhuk.roshambo.client.Client;
-import com.vladhuk.roshambo.client.Connection;
+import com.vladhuk.roshambo.client.util.Connection;
+import com.vladhuk.roshambo.client.util.WindowManager;
 import com.vladhuk.roshambo.server.*;
 import com.vladhuk.roshambo.server.models.Account;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -50,11 +52,7 @@ public class LoginWindowController extends AbstractAuthorizationWindowController
     private CheckBox rememberBox;
 
     private Connection connection = Connection.getConnection();
-
-    @Override
-    protected Stage getCurrentStage() {
-        return (Stage) anchorPane.getScene().getWindow();
-    }
+    private WindowManager windowManager = new WindowManager(() -> (Stage) anchorPane.getScene().getWindow());
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -69,6 +67,8 @@ public class LoginWindowController extends AbstractAuthorizationWindowController
             e.printStackTrace();
         }
     }
+
+
 
     private void setWindowOnlineStatus(boolean status) {
         reconnectButton.setVisible(!status);
@@ -102,13 +102,13 @@ public class LoginWindowController extends AbstractAuthorizationWindowController
 
     @FXML
     void setConnection() throws IOException {
-        newWindow(Client.CONNECTION_WINDOW, connectionStage);
+        windowManager.loadNewWindow(Client.CONNECTION_WINDOW, connectionStage);
     }
 
     @FXML
     void createAccount() throws IOException {
         connectionStage.close();
-        changeWindow(Client.REGISTER_WINDOW);
+        windowManager.changeWindow(Client.REGISTER_WINDOW);
     }
 
     @FXML
@@ -141,7 +141,7 @@ public class LoginWindowController extends AbstractAuthorizationWindowController
         }
 
         connectionStage.close();
-        changeWindow(Client.MENU_WINDOW);
+        windowManager.changeWindow(Client.MENU_WINDOW);
     }
 
     private boolean checkFields() {

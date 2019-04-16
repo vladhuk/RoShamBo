@@ -1,9 +1,10 @@
 package com.vladhuk.roshambo.client.controllers;
 
 import com.vladhuk.roshambo.client.Client;
-import com.vladhuk.roshambo.client.Connection;
-import com.vladhuk.roshambo.client.game.OnlineGameHandler;
-import com.vladhuk.roshambo.client.game.logics.RoShamBo;
+import com.vladhuk.roshambo.client.util.Connection;
+import com.vladhuk.roshambo.client.handler.OnlineGameHandler;
+import com.vladhuk.roshambo.client.game.RoShamBo;
+import com.vladhuk.roshambo.client.util.WindowManager;
 import com.vladhuk.roshambo.server.DisconnectException;
 import com.vladhuk.roshambo.server.ServerCommand;
 import javafx.application.Platform;
@@ -95,10 +96,10 @@ public class OnlineGameWindowController extends AbstractGameWindowController imp
 
     private void disconnect() {
         gameHandler.interrupt();
-        showDisconnectAlert();
+        WindowManager.showDisconnectAlert();
 
         try {
-            changeWindow(Client.MENU_WINDOW);
+            getWindowManager().changeWindow(Client.MENU_WINDOW);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -107,7 +108,7 @@ public class OnlineGameWindowController extends AbstractGameWindowController imp
     @Override
     void back() throws IOException {
         leaveRoom();
-        changeWindow(Client.ROOMS_WINDOW);
+        getWindowManager().changeWindow(Client.ROOMS_WINDOW);
     }
 
     private void leaveRoom() {

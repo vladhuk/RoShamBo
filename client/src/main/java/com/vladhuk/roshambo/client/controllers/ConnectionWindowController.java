@@ -1,6 +1,6 @@
 package com.vladhuk.roshambo.client.controllers;
 
-import com.vladhuk.roshambo.client.Connection;
+import com.vladhuk.roshambo.client.util.Connection;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ConnectionWindowController implements Initializable {
+public class ConnectionWindowController implements Initializable, WindowController {
 
     @FXML
     private TextField ipTextField;

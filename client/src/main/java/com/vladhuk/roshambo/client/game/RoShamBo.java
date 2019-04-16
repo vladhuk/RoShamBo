@@ -1,8 +1,8 @@
-package com.vladhuk.roshambo.client.game.logics;
+package com.vladhuk.roshambo.client.game;
 
 import java.util.Random;
 
-import static com.vladhuk.roshambo.client.game.logics.Outcome.*;
+import static com.vladhuk.roshambo.client.game.Outcome.*;
 
 public enum RoShamBo {
     ROCK(DRAW, WIN, LOSE),

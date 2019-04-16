@@ -1,4 +1,4 @@
-package com.vladhuk.roshambo.client;
+package com.vladhuk.roshambo.client.util;
 
 public class Window {
 

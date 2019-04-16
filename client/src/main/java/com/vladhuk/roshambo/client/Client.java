@@ -1,6 +1,8 @@
 package com.vladhuk.roshambo.client;
 
-import com.vladhuk.roshambo.client.controllers.AbstractWindowController;
+import com.vladhuk.roshambo.client.util.Connection;
+import com.vladhuk.roshambo.client.util.Window;
+import com.vladhuk.roshambo.client.util.WindowManager;
 import com.vladhuk.roshambo.server.models.Account;
 import javafx.application.Application;
 import javafx.scene.image.Image;
@@ -43,7 +45,8 @@ public class Client extends Application {
 
         stage.getIcons().add(new Image("images/RPS.png"));
 
-        AbstractWindowController.newWindow(LOGIN_WINDOW, stage);
+        WindowManager windowManager = new WindowManager();
+        windowManager.loadNewWindow(LOGIN_WINDOW, stage);
     }
 
     private static void createConfigDirectory() {

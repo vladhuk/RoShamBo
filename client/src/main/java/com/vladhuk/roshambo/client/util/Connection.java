@@ -1,5 +1,6 @@
-package com.vladhuk.roshambo.client;
+package com.vladhuk.roshambo.client.util;
 
+import com.vladhuk.roshambo.client.Client;
 import com.vladhuk.roshambo.server.Commander;
 import com.vladhuk.roshambo.server.DisconnectException;
 
